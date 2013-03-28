@@ -5,7 +5,8 @@ A node.js library for Balanced Payments. With the exception of event callback ha
 
 Installation
 ------------
-NPM package is available at https://npmjs.org/package/nbalanced.
+The preferred way to install nbalanced for Node.js is to use the [npm](http://npmjs.org) package manager for Node.js. Simply type the following
+into a terminal window:
 ```
 npm install -g nbalanced
 ```
