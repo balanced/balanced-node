@@ -21,10 +21,12 @@ var nbalanced = require("./../lib/nbalanced");
 // WARNING: This will create a lot of "stuff" in your account, so only use a test marketplace
 // ******************************************************************************************
 // ******************************************************************************************
-var api = new nbalanced({
+var config = {
     marketplace_uri: "/v1/marketplaces/:marketplace-id", // test marketplace
     secret: ":secret" // test secret
-});
+};
+
+var api = new nbalanced(config);
 
 function series(callbacks, last) {
     var results = [];
@@ -314,24 +316,68 @@ series([
             }
             myAccount = object;
             console.log("Created new Account:", myAccount.uri);
+            // Create a new instance of our api client with our new account info
+            api = api.Accounts.nbalanced(myAccount);
             next("api.Accounts.create");
         });
     },
     function(next) {
+        var previousAccountUri = api.Accounts._account_uri;
         api.Accounts.underwrite({
             type: "business",
             name: "Nikki's Porsche",
             phone_number: "+12025874411",
             tax_id: "215263254",
             postal_code: "90210",
-            street_address: "123 Rodeo Drive"
+            street_address: "123 Rodeo Drive",
+            country_code: "USA",
+            person: {
+                name: "Chosimba One",
+                dob: "1984-01-01",
+                postal_code: "90210",
+                street_address: "123 Rodeo Drive",
+                country_code: "USA"
+            }
         }, function (err, object) {
             if (err) {
                 console.error("api.Accounts.underwrite", "business", err);
                 throw err;
             }
             myAccount = object;
-            console.log("Underwrite Account:", myAccount.uri);
+            if (previousAccountUri != myAccount.uri){
+                err = new Error("Error underwriting existing account, it created a new account");
+                console.error("api.Accounts.underwrite", "business", err);
+                throw err;
+            }
+            console.log("Underwrite Existing Account with Business:", myAccount.uri);
+            next("api.Accounts.underwrite.business");
+        });
+    },
+    function(next) {
+        // reset to use a fresh account
+        api = new nbalanced(config);
+        api.Accounts.underwrite({
+            type: "business",
+            name: "Nikki's Porsche",
+            phone_number: "+12025874411",
+            tax_id: "215263254",
+            postal_code: "90210",
+            street_address: "123 Rodeo Drive",
+            country_code: "USA",
+            person: {
+                name: "Chosimba One",
+                dob: "1984-01-01",
+                postal_code: "90210",
+                street_address: "123 Rodeo Drive",
+                country_code: "USA"
+            }
+        }, function (err, object) {
+            if (err) {
+                console.error("api.Accounts.underwrite", "business", err);
+                throw err;
+            }
+            myAccount = object;
+            console.log("Underwrite New Account With Business:", myAccount.uri);
             next("api.Accounts.underwrite.business");
         });
     },
@@ -342,7 +388,8 @@ series([
             phone_number: "+15023335555",
             dob: "1981-12-01",
             postal_code: "90210",
-            street_address: "123 Rodeo Drive"
+            street_address: "123 Rodeo Drive",
+            country_code: "USA"
         }, function (err, object) {
             if (err) {
                 console.error("api.Accounts.underwrite", "person", err);
@@ -351,7 +398,7 @@ series([
             myAccount = object;
             // Create a new instance of our api client with our new account info
             api = api.Accounts.nbalanced(myAccount);
-            console.log("Underwrite Account:", myAccount.uri);
+            console.log("Underwrite New Account With Person:", myAccount.uri);
             next("api.Accounts.underwrite.person");
         });
     },
