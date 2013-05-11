@@ -54,12 +54,46 @@ api.Cards.create({
 });
 ```
 
-Accounts
+Customers
+---------
+
+`Customers` are the best way to manage an entity's bank accounts, cards and transactions
+in the Balanced API and supercede the functionality previously provided by Accounts. Customers
+were created to simplify merchant underwriting so that you can accept money on a vendors behalf.
+
+Because of this, the nbalanced Customer prototype has an additional function called nbalanced, which takes an account object (containing the URI of the account, or from the Customers.(create | get | list) functions). This function returns a new nbalanced() instance with the customer as the context for all actions against it (e.g. a new bank account will be created for that customer automatically).
+
+```js
+// Customers are special, because accounts change API context so that bank account, cards, etc.
+//  that are created for a specific account, are done so without the need for additional URI tracking
+//  or contextual clues.
+
+var newCustomerApi;
+api.Customers.create({ name: "Valued Customer" }, function (err, newCustomer) {
+    if (err) {
+        console.error("api.Customer.create", err);
+        throw err;
+    }
+    // Here we get an customer specific context of nbalanced() to work with. This is necessary for
+    //  customer specific actions.
+    newCustomerApi = api.Customer.nbalanced(newCustomer);
+    console.log("Created new Customer:", newCustomer.uri);
+});
+```
+
+Which now allows us to do:
+
+```js
+// add a bank account to the customer without having to specify the customer_uri
+newCustomerApi.Customers.addBankAccount(tokenized_bank_account_uri, function(err, response){ ... })
+```
+
+Accounts (deprecated)
 --------
 
 Accounts are a special concept in the Balanced API. An account tracks a specific person or business whom may have many cards, bank accounts and transactions. The Balanced API also has specific and special use cases for dealing and interacting with accounts.
 
-Because of this, the nbalanced Accounts prototype has an additional function called nbalanced, which takes an account object (containing the URI of the account, or from the Accounts.(create | get | list) functions). This function returns a new balanced() instance with the account as the context for all actions against it (e.g. a new bank account will be created for that account automatically).
+Because of this, the nbalanced Accounts prototype has an additional function called nbalanced, which takes an account object (containing the URI of the account, or from the Accounts.(create | get | list) functions). This function returns a new nbalanced() instance with the account as the context for all actions against it (e.g. a new bank account will be created for that account automatically).
 
 ```js
 // Accounts are special, because accounts change API context so that bank account, cards, etc.

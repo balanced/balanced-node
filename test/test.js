@@ -1,4 +1,4 @@
-//===========================================================================
+    //===========================================================================
 // FILE: test.js
 //
 // DESCRIPTION:
@@ -59,6 +59,8 @@ var myRefund;
 var myCredit;
 var myAccount;
 var myAccountBankAccount;
+var myCustomer;
+var myAccountCard;
 
 // Start our asynchronous dependency execution test chain
 series([
@@ -306,9 +308,238 @@ series([
 
 
     // ***********************************************************
+    // Customers
+    // ***********************************************************
+    function (next) {
+        api.Customers.create({
+            name: "Philosorapter 9000",
+            email: "philosorapter@example.com",
+            meta: {
+                "customKey.first": "first",
+                "customKey.second": "second"
+            },
+            ssn_last4: "1234",
+            business_name: "Internet Memes LLC",
+            address: {
+                line1: "123 Main St",
+                line2: "Apt. 1",
+                city: "San Francisco",
+                state: "CA",
+                postal_code: "94133",
+                country_code: "USA"
+            },
+            phone: "+19994445555",
+            dob: "1984-01",
+            ein: "451111111"
+            //, facebook: ""
+            //, twitter: ""
+        },function (err, object) {
+            if(err){
+                console.error("api.Customers.create", err);
+                throw err;
+            }
+            myCustomer = object;
+            // console.log(myCustomer);
+            console.log("Created new Customer:", myCustomer.uri);
+            next("api.Customers.create");
+        })
+    },
+    function (next) {
+        api.Customers.get(myCustomer.uri, function (err, object) {
+            if (err) {
+                console.error("api.Customers.get", err);
+                throw err;
+            }
+            myCustomer = object;
+            console.log("Retrieved Customer:", myCustomer.uri);
+            next("api.Customers.get");
+        });
+    },
+    function (next) {
+        api.Customers.update(myCustomer.uri, {
+            name: "updated customer name",
+            meta: {
+                test: true
+            },
+            "illegal-property": "This should not be saved"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.Customers.update", err);
+                throw err;
+            }
+            myCustomer = object;
+            // console.log(myCustomer);
+            if (myCustomer.name != "updated customer name"
+                || myCustomer.meta.test != "True") {
+                var err = new Error("API responded but customer information was not updated");
+                console.error("api.Customers.update", err);
+                throw err;
+            } 
+            console.log("Updated Customer:", myCustomer.uri);
+            next("api.Customers.update");
+        });
+    },
+    function (next) {
+        api.Customers.list(function (err, object) {
+            if (err) {
+                console.error("api.Customers.list", err);
+                throw err;
+            }
+            console.log("List Customers:", object.total, "total");
+            next("api.Customer.list");
+        });
+    },
+    function (next) {
+        api.Customers.addCard(myCustomer.uri, myCard.uri, function (err, object) {
+            if (err) {
+                console.error("api.Customers.addCard", err);
+                throw err;
+            }
+            myCustomer = object;
+            console.log("Added Card to Customer:", myCustomer.uri);
+            next("api.Customers.addCard");
+        });
+    },
+    function (next) {
+        api.BankAccounts.create({
+            name: "Customer Bank Account",
+            account_number: "9900000002",
+            routing_number: "121000000",
+            type: "checking"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.BankAccounts.create3", err);
+                throw err;
+            }
+            myAccountBankAccount = object;
+            console.log("Created new Bank Account to test Customer.addBankAccount:", myAccountBankAccount.uri);
+            next("api.BankAccounts.create3");
+        });
+    },
+    function (next) {
+        api.Customers.addBankAccount(myCustomer.uri, myAccountBankAccount.uri, function (err, object) {
+            if (err) {
+                console.error("api.Customers.addBankAccount", err);
+                throw err;
+            }
+            // myAccount = object;
+            console.log("Added Bank Account to Customer:", myCustomer.uri);
+            next("api.Customers.addBankAccount");
+        });
+    },
+    //
+    // test the Customers api scoped to a particular customer
+    //
+    function (next) {
+        api = api.Customers.nbalanced(myCustomer);
+        api.Customers.update({
+            name: "second customer name update"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.Customers.update scoped", err);
+                throw err;
+            }
+            myCustomer = object;
+            // console.log(myCustomer);
+            if (myCustomer.name != "second customer name update") {
+                var err = new Error("API responded but customer information was not updated");
+                console.error("api.Customers.update scoped", err);
+                throw err;
+            } 
+            console.log("Updated Scoped Customer:", myCustomer.uri);
+            next("api.Customers.update scoped");
+        });
+    },
+    function (next) {
+        api.Customers.get(function (err, object) {
+            if (err) {
+                console.error("api.Customers.get scoped", err);
+                throw err;
+            }
+            myCustomer = object;
+            console.log("Retrieved Scoped Customer:", myCustomer.uri);
+            next("api.Customers.get scoped");
+        });
+    },
+    function (next) {
+        // create a new card to test scoped customer
+        api = new nbalanced(config);
+        api.Cards.create({
+            card_number: "4444444444444448",
+            expiration_year: 2018,
+            expiration_month: 2,
+            security_code: "123",
+            name: "Lacey Ferrari"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.Cards.create scoped", err);
+                throw err;
+            }
+            myCard = object;
+            console.log("Created yet another Card to test scoped Customer.addCard:", myCard.uri);
+            next("api.Cards.create scoped");
+        });
+    },
+    function (next) {
+        // create a new bank account to test scoped customer
+        api.BankAccounts.create({
+            name: "Scoped Customer Bank Account",
+            account_number: "9900000003",
+            routing_number: "121000000",
+            type: "checking"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.BankAccounts.create scoped", err);
+                throw err;
+            }
+            myAccountBankAccount = object;
+            console.log("Created new Bank Account to test scoped Customer.addBankAccount:", myAccountBankAccount.uri);
+            next("api.BankAccounts.create scoped");
+        });
+    },
+    function (next) {
+        api = api.Customers.nbalanced(myCustomer);
+        api.Customers.addCard(myCard.uri, function (err, object) {
+            if (err) {
+                console.error("api.Customers.addCard scoped", err);
+                throw err;
+            }
+            myCustomer = object;
+            console.log("Added Card to Scoped Customer:", myCustomer.uri);
+            next("api.Customers.addCard scoped");
+        });
+    },
+    function (next) {
+        api.Customers.addBankAccount(myAccountBankAccount.uri, function (err, object) {
+            if (err) {
+                console.error("api.Customers.addBankAccount scoped", err);
+                throw err;
+            }
+            // myAccount = object;
+            console.log("Added Bank Account to Scoped Customer:", myCustomer.uri);
+            next("api.Customers.addBankAccount scoped");
+        });
+    },
+    function (next) {
+        api.Customers.destroy(myCustomer.uri, function (err, object) {
+            if (err) {
+                console.error("api.Customers.destroy", err);
+                throw err;
+            }
+            console.log("Destroyed Customer:", myCustomer.uri);
+            myCustomer = null;
+            next("api.Customers.destroy");
+        });
+    },
+
+
+
+
+    // ***********************************************************
     // Accounts
     // ***********************************************************
     function(next) {
+        api = new nbalanced(config);
         api.Accounts.create(function (err, object) {
             if (err) {
                 console.error("api.Accounts.create", err);
@@ -441,7 +672,26 @@ series([
         });
     },
     function (next) {
-        api.Accounts.addCard(myAccount.uri, myCard.uri, function (err, object) {
+        // create a new card to test Accounts.addCard
+        api = new nbalanced(config);
+        api.Cards.create({
+            card_number: "341111111111111",
+            expiration_year: 2020,
+            expiration_month: 9,
+            security_code: "1234",
+            name: "Casey Ferrari"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.Cards.create for Accounts.addCard", err);
+                throw err;
+            }
+            myAccountCard = object;
+            console.log("Created yet another Card to test Accounts.addCard:", myAccountCard.uri);
+            next("api.Cards.create for Accounts.addCard");
+        });
+    },
+    function (next) {
+        api.Accounts.addCard(myAccount.uri, myAccountCard.uri, function (err, object) {
             if (err) {
                 console.error("api.Accounts.addCard", err);
                 throw err;
@@ -465,6 +715,7 @@ series([
     },
     */
     function (next) {
+        api = api.Accounts.nbalanced(myAccount);
         api.BankAccounts.create({
             name: "Veronica Lamborghini",
             account_number: "9900000001",
@@ -472,7 +723,7 @@ series([
             type: "checking"
         }, function (err, object) {
             if (err) {
-                console.error("api.BankAccounts.create3", err);
+                console.error("api.BankAccounts.create4", err);
                 throw err;
             }
             myAccountBankAccount = object;
@@ -514,7 +765,7 @@ series([
         api.Holds.create({
             amount: 10000,
             appears_on_statement_as: "HOLDS-R-US",
-            source_uri: myCard.uri
+            source_uri: myAccountCard.uri
         }, function (err, object) {
             if (err) {
                 console.error("api.Holds.create", err);
@@ -578,7 +829,7 @@ series([
         api.Holds.create({
             amount: 10000,
             appears_on_statement_as: "HOLDS-R-US2",
-            source_uri: myCard.uri
+            source_uri: myAccountCard.uri
         }, function (err, object) {
             if (err) {
                 console.error("api.Holds.create2", err);
@@ -600,6 +851,7 @@ series([
     // Debits
     // ***********************************************************
     function (next) {
+        api = api.Accounts.nbalanced(myAccount);
         api.Debits.create({
             amount: 9800,
             hold_uri: myHold.uri
@@ -618,7 +870,7 @@ series([
             amount: 20000,
             appears_on_statement_as: "TEST2CARD",
             description: "test debit on card",
-            source_uri: myCard.uri
+            source_uri: myAccountCard.uri
         }, function (err, object) {
             if (err) {
                 console.error("api.Debits.create2", err);
@@ -788,7 +1040,7 @@ series([
             amount: 20000,
             appears_on_statement_as: "TEST3CARD",
             description: "test debit on card",
-            source_uri: myCard.uri
+            source_uri: myAccountCard.uri
         }, function (err, object) {
             if (err) {
                 console.error("api.Debits.create4", err);
