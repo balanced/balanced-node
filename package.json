@@ -1,7 +1,7 @@
 {
     "name": "nbalanced",
     "description": "Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "author": "Tenor Enterprises, LLC.",
     "maintainers": [
         "cscharf, chad.scharf@tenorent.com"
