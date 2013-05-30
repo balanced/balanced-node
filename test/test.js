@@ -75,41 +75,12 @@ series([
 	    next("Load test market");
 	}else{
 	    console.log("Creating new marketplace");
-	    var request_params = {
-		hostname: "api.balancedpayments.com",
-		port: 443,
-		path: "/v1/api_keys",
-		method: "POST",
-		headers: {
-		    "content-type": "application/json",
-		    "content-length": 0,
-		    "accept": "*/*"
-		}
-	    };
-	    var req = https.request(request_params, function(res) {
-		var data = "";
-		res.on('data', function(d) { data += d.toString(); });
-		res.on('end', function () {
-		    var json = JSON.parse(data)
-		    config.secret = json.secret;
-		    request_params.path = "/v1/marketplaces";
-		    request_params.auth = config.secret +":";
-		    var req2 = https.request(request_params, function(res) {
-			var data = "";
-			res.on('data', function(d) { data += d.toString(); });
-			res.on('end', function() {
-			    //console.log(data);
-			    var json2 = JSON.parse(data);
-			    config.marketplace_uri = json2.uri;
-			    api = new nbalanced(config);
-			    console.log("Marketplace created", config.marketplace_uri, "secret:", config.secret);
-			    next("Create test market");
-			});
-		    });
-		    req2.end("");
-		});
+	    nbalanced.MakeTestMarket(function(err, conf) {
+		config = conf;
+		api = new nbalanced(config);
+		console.log("Marketplace created", config.marketplace_uri, "secret:", config.secret);
+		next("Created test market");
 	    });
-	    req.end("");
 	}
     },
 

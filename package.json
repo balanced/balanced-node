@@ -1,5 +1,5 @@
 {
-    "name": "balanced",
+    "name": "balanced-official",
     "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
     "version": "0.2.0",
     "author": "Balanced Payments / Tenor Enterprises, LLC.",
