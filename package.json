@@ -1,22 +1,26 @@
 {
-    "name": "nbalanced",
-    "description": "Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
+    "name": "balanced",
+    "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
     "version": "0.2.0",
-    "author": "Tenor Enterprises, LLC.",
-    "maintainers": [
-        "cscharf, chad.scharf@tenorent.com"
+    "author": "Balanced Payments / Tenor Enterprises, LLC.",
+    "contributors": [
+	"matthewfl, matthew@balancedpayments.com",
+	"cscharf, chad.scharf@tenorent.com"
     ],
     "repository": {
-        "type": "git",
-        "url": "https://github.com/TenorEnterprises/nbalanced.git"
+	"type": "git",
+	"url": "https://github.com/balanced/balanced-node.git"
     },
     "keywords": [
-        "balanced",
-        "payments"
+	"balanced",
+	"payments"
     ],
     "license": "MIT",
     "main": "./lib/nbalanced.js",
     "engines": {
-        "node": ">= 0.6.0"
+	"node": ">= 0.6.0"
+    },
+    "scripts": {
+	"test": "node test/test.js"
     }
 }

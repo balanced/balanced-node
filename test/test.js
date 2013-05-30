@@ -15,18 +15,18 @@
  */
 
 var nbalanced = require("./../lib/nbalanced");
+var https = require('https');
 
 // ******************************************************************************************
 // ******************************************************************************************
 // WARNING: This will create a lot of "stuff" in your account, so only use a test marketplace
+//   This will automatically create a new test account if one is not specified
 // ******************************************************************************************
 // ******************************************************************************************
 var config = {
-    marketplace_uri: "/v1/marketplaces/:marketplace-id", // test marketplace
-    secret: ":secret" // test secret
+    // marketplace_uri: "/v1/marketplaces/:marketplace-id", // test marketplace
+    // secret: ":secret" // test secret
 };
-
-var api = new nbalanced(config);
 
 function series(callbacks, last) {
     var results = [];
@@ -50,6 +50,8 @@ function series(callbacks, last) {
     next();
 }
 
+var api;
+
 var myCard;
 var myBankAccount;
 var myVerification;
@@ -64,6 +66,51 @@ var myAccountCard;
 
 // Start our asynchronous dependency execution test chain
 series([
+    // ***********************************************************
+    // Create test market place
+    // ***********************************************************
+    function (next) {
+	if(config.marketplace_uri && config.secret) {
+	    api = new nbalanced(config);
+	    next("Load test market");
+	}else{
+	    var request_params = {
+		hostname: "api.balancedpayments.com",
+		port: 443,
+		path: "/v1/api_keys",
+		method: "POST",
+		headers: {
+		    "content-type": "application/json",
+		    "content-length": 0,
+		    "accept": "*/*"
+		}
+	    };
+	    var req = https.request(request_params, function(res) {
+		var data = "";
+		res.on('data', function(d) { data += d.toString(); });
+		res.on('end', function () {
+		    var json = JSON.parse(data)
+		    config.secret = json.secret;
+		    request_params.path = "/v1/marketplaces";
+		    request_params.auth = config.secret +":";
+		    var req2 = https.request(request_params, function(res) {
+			var data = "";
+			res.on('data', function(d) { data += d.toString(); });
+			res.on('end', function() {
+			    //console.log(data);
+			    var json2 = JSON.parse(data);
+			    config.marketplace_uri = json2.uri;
+			    api = new nbalanced(config);
+			    next("Create test market");
+			});
+		    });
+		    req2.end("");
+		});
+	    });
+	    req.end("");
+	}
+    },
+
 
     // ***********************************************************
     // Cards
@@ -374,7 +421,7 @@ series([
                 var err = new Error("API responded but customer information was not updated");
                 console.error("api.Customers.update", err);
                 throw err;
-            } 
+            }
             console.log("Updated Customer:", myCustomer.uri);
             next("api.Customers.update");
         });
@@ -445,7 +492,7 @@ series([
                 var err = new Error("API responded but customer information was not updated");
                 console.error("api.Customers.update scoped", err);
                 throw err;
-            } 
+            }
             console.log("Updated Scoped Customer:", myCustomer.uri);
             next("api.Customers.update scoped");
         });
@@ -957,7 +1004,7 @@ series([
     // ***********************************************************
     function (next) {
         api.Credits.create({
-            amount: 10000,
+            amount: 100,
             bank_account: {
                 routing_number: "121000358",
                 account_number: "9900000001",
@@ -975,7 +1022,7 @@ series([
         });
     },
     function (next) {
-        api.Credits.add(myAccountBankAccount.credits_uri, 10000, "Have some free money", function (err, object) {
+        api.Credits.add(myAccountBankAccount.credits_uri, 3400, "Have some free money", function (err, object) {
             if (err) {
                 console.error("api.Credits.add", err);
                 throw err;
@@ -987,7 +1034,7 @@ series([
     // This is here because we have to have money from a prior sequence before we can test this shortcut
     //  method on bandAccount.
      function (next) {
-         api.BankAccounts.credit(myAccountBankAccount.credits_uri, 1000, "Have some free money", function (err, object) {
+         api.BankAccounts.credit(myAccountBankAccount.credits_uri, 600, "Have some free money", function (err, object) {
              if (err) {
                  console.error("api.BankAccounts.credit", err);
                  throw err;

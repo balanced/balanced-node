@@ -8,7 +8,7 @@ Installation
 The preferred way to install nbalanced for Node.js is to use the [npm](http://npmjs.org) package manager for Node.js. Simply type the following
 into a terminal window:
 ```
-npm install nbalanced
+npm install balanced
 ```
 
 Testing
@@ -22,7 +22,7 @@ var api = new nbalanced({
     secret: ":secret" // test secret
 });
 ```
-    
+
 As a word of *caution*, running through all of the tests will generate a lot of garbage in your test account, you have been forewarned.
 
 Basic Usage
@@ -120,3 +120,5 @@ api.Accounts.nbalannced({
   uri: "/v1/marketplaces/:marketplace-id/accounts/:account-id"
 }).BankAccounts.create({/*...*/}, function (err, object){/*...*/});
 ```
+
+Originally written by Tenor Enterprises
