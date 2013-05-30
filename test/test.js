@@ -1,4 +1,4 @@
-    //===========================================================================
+//===========================================================================
 // FILE: test.js
 //
 // DESCRIPTION:
@@ -74,6 +74,7 @@ series([
 	    api = new nbalanced(config);
 	    next("Load test market");
 	}else{
+	    console.log("Creating new marketplace");
 	    var request_params = {
 		hostname: "api.balancedpayments.com",
 		port: 443,
@@ -101,6 +102,7 @@ series([
 			    var json2 = JSON.parse(data);
 			    config.marketplace_uri = json2.uri;
 			    api = new nbalanced(config);
+			    console.log("Marketplace created", config.marketplace_uri, "secret:", config.secret);
 			    next("Create test market");
 			});
 		    });
@@ -389,7 +391,7 @@ series([
             // console.log(myCustomer);
             console.log("Created new Customer:", myCustomer.uri);
             next("api.Customers.create");
-        })
+        });
     },
     function (next) {
         api.Customers.get(myCustomer.uri, function (err, object) {
@@ -579,6 +581,60 @@ series([
         });
     },
 
+    // test debiting a scoped customer
+    function (next) {
+	api = new nbalanced(config);
+	api.Customers.create({}, function(err, object) {
+	    if (err) {
+                console.error("api.Customers.create", err);
+                throw err;
+            }
+	    myCustomer = object;
+            console.log("Created second Customer:", myCustomer.uri);
+	    next("api.Customers.create");
+	});
+    },
+
+    function (next) {
+        // create a new card to test scoped customer
+        api.Cards.create({
+            card_number: "4111111111111111",
+            expiration_year: 2018,
+            expiration_month: 2,
+            security_code: "123",
+            name: "Joe Ferrari"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.Cards.create", err);
+                throw err;
+            }
+            myCard = object;
+            console.log("Created yet another Card to test scoped Customer.addCard:", myCard.uri);
+            next("api.Cards.create scoped");
+        });
+    },
+    function (next) {
+	api = api.Customers.nbalanced(myCustomer);
+	api.Customers.addCard(myCard.uri, function (err, object) {
+	    if (err) {
+                console.error("api.Customers.addCard scoped", err);
+                throw err;
+            }
+            myCustomer = object;
+            console.log("Added Card to Scoped Customer:", myCustomer.uri);
+            next("api.Customers.addCard scoped");
+	});
+    },
+    function (next) {
+	api.Debits.create({ amount: 5000 }, function(err, object) {
+	    if (err) {
+                console.error("api.Debits.create scoped", err);
+                throw err;
+            }
+	    console.log("Debited Card to Scoped Customer", myCustomer.uri);
+	    next("api.Debits.create scoped");
+	});
+    },
 
 
 
