@@ -8,7 +8,11 @@ var config = {
 	bankAccount: "/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
 	card: "/v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
 	account: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",
-	customer: ""
+	customer: "-customer-uri-",
+	debit: "-debit-uri",
+	hold: "-hold-uri",
+	credit: "-credits-uri",
+	refund: "-refund-uri"
     },
 
 
@@ -56,21 +60,32 @@ var directories = fs.readdirSync('.');
 directories.splice(directories.indexOf('render.js'), 1);
 directories.splice(directories.indexOf('peramble.js'), 1);
 
-var peramble = "";
+var preamble = "";
+var preamble_run = ""
 
 function process_save(dir,definition,request) {
     var result =
 	"% if mode == 'definition': \n"
 	+ definition + "\n"
 	+ "% else:\n"
-	+ peramble + "\n"
-	+ request + "\n"
+	+ preamble + "\n"
+	+ request.replace(/LOG/g, "/* . . . */") + "\n"
 	+ "% endif\n";
+    var code =
+	preamble_run + "\n"
+	+ "function run () { \n"
+	+ request.replace(/LOG/g, "console.log(arguments);\n")
+	+ " \n }";
     fs.writeFile('./'+dir+'/node.mako', result, function(err) {
 	if(err)
 	    console.log("failed to save "+dir);
 	console.log(definition || request ? "Generating " : "Blank ", dir);
     });
+    if(request)
+	fs.writeFile('./'+dir+'/run.js', code, function(err) {
+	    if(err)
+		console.log("failed to save "+dir);
+	});
 }
 
 function process_request (dir, definition) {
@@ -114,15 +129,21 @@ function process_dir(dir) {
 }
 
 function start_generate() {
-    var peramble_job = mu.compileAndRender('./peramble.js', config);
-    peramble_job.on('data', function(d) {
-	peramble += d.toString();
+    var preamble_job = mu.compileAndRender('./peramble.js', config);
+    preamble_job.on('data', function(d) {
+	preamble += d.toString();
     });
 
-    peramble_job.on('end', function () {
-	for(var at = 0; at < directories.length; at++) {
-	    process_dir(directories[at]);
-	}
+    preamble_job.on('end', function () {
+	var preamble_job_run = mu.compileAndRender('./peramble-run.js', config);
+	preamble_job_run.on('data', function(d) {
+	    preamble_run += d.toString();
+	});
+	preamble_job_run.on('end', function () {
+	    for(var at = 0; at < directories.length; at++) {
+		process_dir(directories[at]);
+	    }
+	});
     });
 }
 
