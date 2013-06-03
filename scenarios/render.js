@@ -12,7 +12,8 @@ var config = {
 	debit: "-debit-uri",
 	hold: "-hold-uri",
 	credit: "-credits-uri",
-	refund: "-refund-uri"
+	refund: "-refund-uri",
+	event: "-event-uri"
     },
 
 
