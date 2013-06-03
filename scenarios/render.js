@@ -8,12 +8,11 @@ var config = {
 	bankAccount: "/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
 	card: "/v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
 	account: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",
-	customer: "-customer-uri-",
-	debit: "-debit-uri",
-	hold: "-hold-uri",
-	credit: "-credits-uri",
-	refund: "-refund-uri",
-	event: "-event-uri"
+	debit: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4",
+	hold: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
+	credit: "/v1/credits/CRtRb08dbRcgATb3rTMtXei",
+	refund: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
+	event: "/v1/events/EVda9622507c9311e2b21f026ba7cac9da"
     },
 
 
