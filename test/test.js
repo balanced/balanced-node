@@ -63,6 +63,7 @@ var myAccount;
 var myAccountBankAccount;
 var myCustomer;
 var myAccountCard;
+var myEvent;
 
 // Start our asynchronous dependency execution test chain
 series([
@@ -1178,6 +1179,36 @@ series([
             console.log("Updated Refund:", object.uri);
             next("api.Refunds.update");
         });
+    },
+
+
+
+    // ***********************************************************
+    // Events
+    // ***********************************************************
+    function (next) {
+	api.Events.list({
+	    offset: 0,
+	    limit: 50
+	}, function(err, object) {
+	    if(err) {
+		console.error("api.Events.list", err);
+		throw err;
+	    }
+	    console.log("List Events", object.uri);
+	    myEvent = object.items[0];
+	    next("api.Events.list");
+	});
+    },
+    function (next) {
+	api.Events.get(myEvent.uri, function(err, object) {
+	    if(err) {
+		console.error("api.Events.get", err);
+		throw err;
+	    }
+	    console.log("Retrieved Event", object.uri);
+	    next("api.Events.get");
+	});
     },
 
 

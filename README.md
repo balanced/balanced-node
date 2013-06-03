@@ -1,7 +1,7 @@
 Balanced Node.js library
 =========
 
-The official Node.js library for Balanced Payments.  Originally written by Tenor Enterprises.
+The official Node.js library for [Balanced Payments](https://www.balancedpayments.com).  Originally written by [Tenor Enterprises](http://tenorent.com/).
 
 The Balanced Payments API located here: https://www.balancedpayments.com/docs/api.
 
