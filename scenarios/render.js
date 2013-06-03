@@ -18,6 +18,7 @@ var config = {
 
 
     name: make_selection([ "Johann Bernoulli",
+			   "Timmy Q. CopyPasta",
 			   "George Washington",
 			   "Alan Turing",
 			   "Dennis Ritchie"
