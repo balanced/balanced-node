@@ -55,7 +55,7 @@ var fs = require('fs');
 var mu = require('mu2');
 var balanced = require('..');
 
-var directories = fs.readdirSync('.');
+var directories = fs.readdirSync(__dirname);
 
 // remove this file from the list
 directories.splice(directories.indexOf('render.js'), 1);
@@ -77,20 +77,20 @@ function process_save(dir,definition,request) {
 	+ "function run () { \n"
 	+ request.replace(/LOG/g, "console.log(arguments);\n")
 	+ " \n }";
-    fs.writeFile('./'+dir+'/node.mako', result, function(err) {
+    fs.writeFile(__dirname+'/'+dir+'/node.mako', result, function(err) {
 	if(err)
 	    console.log("failed to save "+dir);
 	console.log(definition || request ? "Generating " : "Blank ", dir);
     });
     if(request)
-	fs.writeFile('./'+dir+'/run.js', code, function(err) {
+	fs.writeFile(__dirname+'/'+dir+'/run.js', code, function(err) {
 	    if(err)
 		console.log("failed to save "+dir);
 	});
 }
 
 function process_request (dir, definition) {
-    var job = mu.compileAndRender('./'+dir+'/request.js', config);
+    var job = mu.compileAndRender(__dirname+'/'+dir+'/request.js', config);
     var dd = "";
     job.on('data', function(d) {
 	dd += d.toString();
@@ -101,7 +101,7 @@ function process_request (dir, definition) {
 }
 
 function process_dir(dir) {
-    fs.readdir('./'+dir, function(err, contents) {
+    fs.readdir(__dirname+'/'+dir, function(err, contents) {
 	if(err) return; // was not a directory
 
 	if(contents.indexOf('node.mako')) {
@@ -110,7 +110,7 @@ function process_dir(dir) {
 
 	if(contents.indexOf('definition.js') != -1) {
 	    var dd = "";
-	    var job = mu.compileAndRender('./'+dir+'/definition.js', config);
+	    var job = mu.compileAndRender(__dirname+'/'+dir+'/definition.js', config);
 	    job.on('data', function(d) {
 		dd += d.toString();
 	    });
@@ -130,13 +130,13 @@ function process_dir(dir) {
 }
 
 function start_generate() {
-    var preamble_job = mu.compileAndRender('./peramble.js', config);
+    var preamble_job = mu.compileAndRender(__dirname + '/peramble.js', config);
     preamble_job.on('data', function(d) {
 	preamble += d.toString();
     });
 
     preamble_job.on('end', function () {
-	var preamble_job_run = mu.compileAndRender('./peramble-run.js', config);
+	var preamble_job_run = mu.compileAndRender(__dirname + '/peramble-run.js', config);
 	preamble_job_run.on('data', function(d) {
 	    preamble_run += d.toString();
 	});
@@ -150,3 +150,5 @@ function start_generate() {
 
 
 start_generate();
+
+console.log(this, __dirname);
