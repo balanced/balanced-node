@@ -1212,6 +1212,28 @@ series([
     },
 
 
+    // ***********************************************************
+    // Build Docs
+    // ***********************************************************
+    function (next) {
+	var child_process = require('child_process');
+	var render = child_process.spawn('node', [__dirname + '/../scenarios/render.js']);
+	render.stdout.on('data', function(data) {
+	    console.log("Render: "+ data);
+	});
+	render.stderr.on('data', function(data) {
+	    console.log("Render err: "+ data);
+	});
+	render.on('exit', function(code) {
+	    console.log(arguments);
+	    if(code !== 0) {
+		console.error("Render templates");
+		throw "Render Template error";
+	    }
+	    console.log("Scenarios templates rendered");
+	    next("Templates render");
+	});
+    },
 
 
     // Default end sequence function, makes copy/paste easier w/ the commas
