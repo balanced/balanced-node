@@ -15,7 +15,7 @@
  */
 
 var nbalanced = require("./../lib/nbalanced");
-var https = require('https');
+var assert = require('assert');
 
 // ******************************************************************************************
 // ******************************************************************************************
@@ -1196,6 +1196,7 @@ series([
 		throw err;
 	    }
 	    console.log("List Events", object.uri);
+	    assert(object.items.length, "No events were listed");
 	    myEvent = object.items[0];
 	    next("api.Events.list");
 	});
@@ -1245,4 +1246,5 @@ series([
 ], function (results) {
     console.log("Done; completed the following tests:");
     console.log(results);
+    process.exit(results[results.length-1][0] == "Sequence Complete" ? 0 : results.length+1);
 });
