@@ -12,7 +12,8 @@ var config = {
 	hold: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
 	credit: "/v1/credits/CRtRb08dbRcgATb3rTMtXei",
 	refund: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
-	event: "/v1/events/EVda9622507c9311e2b21f026ba7cac9da"
+	event: "/v1/events/EVda9622507c9311e2b21f026ba7cac9da",
+	customer: "/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ/refunds"
     },
 
 

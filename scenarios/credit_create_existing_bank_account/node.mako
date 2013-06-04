@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Credits.add("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", 6800, "Renting a bike", function(err, result) {
+balanced.Credits.add("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", 2000, "Party Supplies", function(err, result) {
     /* . . . */
 });
 

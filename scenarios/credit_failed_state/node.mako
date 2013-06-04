@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Credits.create({
-    amount: 5700,
+    amount: 0400,
     bank_account: {
 	name: "Johann Bernoulli",
 	account_number: "9900000001",
