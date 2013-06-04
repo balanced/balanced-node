@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Refunds.create("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4", { amount: 5800 }, function(err, result) {
+balanced.Refunds.create("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4", { amount: 2700 }, function(err, result) {
     /* . . . */
 });
 

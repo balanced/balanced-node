@@ -16,7 +16,7 @@ balanced.Credits.create({
 	routing_number: "321174851"
 	type: "Checking"
     },
-    amount: "7600"
+    amount: "0200"
 }, function(err, result) {
     /* . . . */
 });

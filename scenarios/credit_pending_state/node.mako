@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Credits.create({
-    amount: 2600,
+    amount: 2900,
     bank_account: {
 	name: "George Washington",
 	account_number: "9473857386",

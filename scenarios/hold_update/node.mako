@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Holds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW", { description: "Not Renting a bike" }, function(err, result) {
+balanced.Holds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW", { description: "Not Party Supplies" }, function(err, result) {
     /* . . . */
 });
 

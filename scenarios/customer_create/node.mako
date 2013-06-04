@@ -1,5 +1,5 @@
 % if mode == 'definition': 
-balanced.Credits.create
+balanced.Customers.create
 
 % else:
 var balanced_library = require('balanced');
@@ -9,14 +9,8 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Credits.create({
-    amount: 9700,
-    bank_account: {
-	name: "Dennis Ritchie",
-	account_number: "9473857386",
-	routing_number: "122000030",
-	type: "checking"
-    }
+balanced.Customers.create({
+
 }, function(err, result) {
     /* . . . */
 });
