@@ -15,10 +15,10 @@ balanced.BankAccounts.create({
       type: "checking"
     }, function(err, result) {
 	if(err) {
-	    console.log(err.description);
+	    console.error(err);
 	    throw err;
 	}
-
+	/* . . . */
     });
 
 % endif

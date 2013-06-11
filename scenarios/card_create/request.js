@@ -4,5 +4,5 @@
     expiration_month: {{month}},
     security_code: "123"
 }, function(err, result) {
-
+    LOG
 });

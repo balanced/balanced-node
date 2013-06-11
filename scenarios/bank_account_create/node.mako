@@ -15,7 +15,7 @@ balanced.BankAccounts.create({
     routing_number: "321174851",
     type: "checking"
 }, function(err, result) {
-
+    /* . . . */
 });
 
 % endif

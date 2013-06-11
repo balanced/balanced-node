@@ -10,11 +10,11 @@ var balanced = new balanced_library({
 });
 
 balanced.Credits.create({
-    amount: 2900,
+    amount: 9700,
     bank_account: {
-	name: "George Washington",
-	account_number: "9473857386",
-	routing_number: "122000030",
+	name: "Timmy Q. CopyPasta",
+	account_number: "2345617845",
+	routing_number: "321174851",
 	type: "checking"
     }
 }, function(err, result) {

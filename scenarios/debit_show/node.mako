@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Debits.get("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4", function(err, result) {
-
+    /* . . . */
 });
 
 % endif

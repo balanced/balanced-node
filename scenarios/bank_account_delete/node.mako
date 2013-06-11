@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.BankAccounts.delete("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", function (err, result) {
-
+    /* . . . */
 });
 
 % endif

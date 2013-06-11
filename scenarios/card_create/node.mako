@@ -12,10 +12,10 @@ var balanced = new balanced_library({
 balanced.Cards.create({
     card_number: "4111111111111111",
     expiration_year: 2020,
-    expiration_month: 10,
+    expiration_month: 6,
     security_code: "123"
 }, function(err, result) {
-
+    /* . . . */
 });
 
 % endif

@@ -9,7 +9,9 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Refunds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE", { description: "Not Testing balanced" }, function(err, result) {
+balanced.Refunds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
+		       { description: "Not Testing balanced" },
+		       function(err, result) {
     /* . . . */
 });
 

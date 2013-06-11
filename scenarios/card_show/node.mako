@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Cards.get("/v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy", function(err, result) {
-
+    /* . . . */
 });
 
 % endif

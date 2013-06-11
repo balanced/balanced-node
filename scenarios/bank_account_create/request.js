@@ -4,5 +4,5 @@
     routing_number: "{{routing_number}}",
     type: "checking"
 }, function(err, result) {
-
+    LOG
 });

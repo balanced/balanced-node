@@ -10,11 +10,11 @@ var balanced = new balanced_library({
 });
 
 balanced.Credits.create({
-    amount: 0400,
+    amount: 6600,
     bank_account: {
-	name: "Johann Bernoulli",
-	account_number: "9900000001",
-	routing_number: "021000021",
+	name: "Dennis Ritchie",
+	account_number: "9473857386",
+	routing_number: "122000030",
 	type: "checking"
     }
 }, function(err, result) {

@@ -10,8 +10,9 @@ var balanced = new balanced_library({
 });
 
 balanced.BankAccounts.get("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", function(err, result) {
-    balanced.BankAccounts.verifications(result.verifications_uri, function(err, result) {
-
+    balanced.BankAccounts.verifications(result.verifications_uri,
+				       function(err, result) {
+	/* . . . */
     });
 });
 
