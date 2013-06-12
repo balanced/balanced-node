@@ -10,8 +10,8 @@ console.log("Looking for scenario.cache", scenario);
 
 
 
-var scenarios_file = fs.readFileSync(scenario).toString();
-scenarios = JSON.parse(scenarios_file);
+//var scenarios_file = fs.readFileSync(scenario).toString();
+//scenarios = JSON.parse(scenarios_file);
 //console.log(scenarios);
 //console.log(scenarios_file);
 
@@ -22,7 +22,7 @@ var config = {
     secret: "${ctx.api_key}", //"3c49b172ca1611e29e4e026ba7f8ec28",
     // different uris to use
     uri: {
-	marketplace: "${api_location}",// "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw",
+	marketplace: "${ctx.marketplace_uri}",
 	bankAccount: "${request['uri']}",///v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
 	card: "${request['uri']}", ///v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
 	account: "${request['uri']}",///v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",

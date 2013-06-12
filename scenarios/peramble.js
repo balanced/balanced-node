@@ -1,3 +1,10 @@
+<%!
+    import json
+
+    def to_json( d ):
+        return json.dumps( d , indent=4)
+%>
+
 var balanced_library = require('balanced');
 
 var {{api}} = new balanced_library({
