@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Credits.add("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", 8400, "Party Supplies",
+balanced.Credits.add("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", 7100, "Testing balanced",
 		    function(err, result) {
     /* . . . */
 });

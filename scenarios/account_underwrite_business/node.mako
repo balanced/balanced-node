@@ -20,7 +20,7 @@ balanced.Accounts.underwrite({
     phone_number: "+14089999999",
     dob: "1989-12",
     postal_code: "94110",
-    name: "Timmy Q. CopyPasta",
+    name: "George Washington",
     street_address: "121 Skriptkid Row"
   }
 }, function(err, result) {

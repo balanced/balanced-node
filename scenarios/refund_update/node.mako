@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Refunds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
-		       { description: "Not Testing balanced" },
+		       { description: "Not Renting a bike" },
 		       function(err, result) {
     /* . . . */
 });

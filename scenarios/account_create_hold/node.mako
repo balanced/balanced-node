@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 
 balanced.Accounts.get("/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh", function(err, result) {
     var user = balanced.Accounts.nbalanced(result);
-    user.Holds.create({ amount: 7600 }, function(err, result) {
+    user.Holds.create({ amount: 5100 }, function(err, result) {
 	/* . . . */
     });
 });

@@ -9,8 +9,8 @@ var balanced = new balanced_library({
 });
 
 balanced.BankAccounts.get("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", function(err, result) {
-    balanced.BankAccounts.credit(result.credits_uri, 9200,
-				"Renting a bike", function(err, result) {
+    balanced.BankAccounts.credit(result.credits_uri, 2300,
+				"Testing balanced", function(err, result) {
 				    /* . . . */
     });
 });

@@ -9,8 +9,8 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Customers.update("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ/refunds",
-			 { name: "George Washington" },
+balanced.Customers.update("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ",
+			 { name: "Alan Turing" },
 			 function(err, result) {
     /* . . . */
 });

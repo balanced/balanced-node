@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.BankAccounts.create({
-    name: "George Washington",
+    name: "Alan Turing",
     account_number: "2345617845",
     routing_number: "321174851",
     type: "checking"
