@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Holds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
-		     { description: "Not Party Supplies" },
+		     { description: "Not Testing balanced" },
 		     function(err, result) {
     /* . . . */
 });

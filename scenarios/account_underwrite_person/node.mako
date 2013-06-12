@@ -11,7 +11,7 @@ var balanced = new balanced_library({
 
 balanced.Accounts.underwrite({
     phone_number: "+14089999999"
-    name: "Alan Turing",
+    name: "Timmy Q. CopyPasta",
     dob: "1989-12",
     postal_code: "94110",
     type: "person",

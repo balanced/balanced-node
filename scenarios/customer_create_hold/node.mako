@@ -9,9 +9,9 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Customers.get("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ/refunds", function(err, result) {
+balanced.Customers.get("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ", function(err, result) {
     var user = balanced.Customers.balanced(result);
-    user.Holds.create({ amount: "1800" }, function(err, result) {
+    user.Holds.create({ amount: "1300" }, function(err, result) {
 	/* . . . */
     });
 });
