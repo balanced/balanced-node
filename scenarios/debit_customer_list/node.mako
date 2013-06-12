@@ -1,5 +1,4 @@
 % if mode == 'definition': 
-balanced.Cards.create
 
 % else:
 var balanced_library = require('balanced');
@@ -9,13 +8,11 @@ var balanced = new balanced_library({
     secret: "3c49b172ca1611e29e4e026ba7f8ec28"
 });
 
-balanced.Cards.create({
-    card_number: "4111111111111111",
-    expiration_year: 2024,
-    expiration_month: 1,
-    security_code: "123"
-}, function(err, result) {
-    /* . . . */
+balanced.Customers.get("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ", function(err, result) {
+    var user = balanced.Customers.nbalanced(result);
+    user.Debits.list({ limit: 10, offset: 0 }, function(err, result) {
+	/* . . . */
+    });
 });
 
 % endif

@@ -10,7 +10,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Debits.create({
-    amount: 5700,
+    amount: 1600,
     source_uri: "/v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy"
 }, function(err, result) {
     /* . . . */
