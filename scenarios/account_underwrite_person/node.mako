@@ -2,21 +2,22 @@
 balanced.Accounts.underwrite
 
 % else:
+<%!
+    import json
+
+    def to_json( d ):
+        return json.dumps( d , indent=4)
+%>
+
 var balanced_library = require('balanced');
 
 var balanced = new balanced_library({
-    marketplace_uri: "${api_location}",
+    marketplace_uri: "${ctx.marketplace_uri}",
     secret: "${ctx.api_key}"
 });
 
-balanced.Accounts.underwrite({
-    phone_number: "+14089999999"
-    name: "${payload['name']}",
-    dob: "1989-12",
-    postal_code: "94110",
-    type: "person",
-    street_address: "21 Skriptkid Row",
-}, function(err, result) {
+balanced.Accounts.underwrite(${to_json( payload['merchant'] ) | n }
+, function(err, result) {
     /* . . . */
 });
 
