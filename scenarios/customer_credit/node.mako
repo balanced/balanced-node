@@ -4,13 +4,13 @@
 var balanced_library = require('balanced');
 
 var balanced = new balanced_library({
-    marketplace_uri: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw",
-    secret: "3c49b172ca1611e29e4e026ba7f8ec28"
+    marketplace_uri: "${api_location}",
+    secret: "${ctx.api_key}"
 });
 
 balanced.Customers.get("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ", function(err, result) {
     var user = balanced.Customers.nbalanced(result);
-    user.Credits.create({ amount: 7000 }, function(err, result) {
+    user.Credits.create({ amount: 5500 }, function(err, result) {
 	/* . . . */
     });
 });

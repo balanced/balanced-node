@@ -1,10 +1,28 @@
+var fs = require('fs');
+var mu = require('mu2');
+//var balanced = require('..');
+
+
+
+
+var scenario = process.argv[process.argv.length-1];
+console.log("Looking for scenario.cache", scenario);
+
+
+
+var scenarios_file = fs.readFileSync(scenario).toString();
+scenarios = JSON.parse(scenarios_file);
+//console.log(scenarios);
+//console.log(scenarios_file);
+
+
 var config = {
     api: "balanced", // the name of the api object to use
     user: "user",
-    secret: "3c49b172ca1611e29e4e026ba7f8ec28",
+    secret: "${ctx.api_key}", //"3c49b172ca1611e29e4e026ba7f8ec28",
     // different uris to use
     uri: {
-	marketplace: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw",
+	marketplace: "${api_location}",// "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw",
 	bankAccount: "/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
 	card: "/v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
 	account: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",
@@ -45,6 +63,13 @@ var config = {
 };
 
 
+function make_config (name) {
+    var ret = scenario[name];
+    ret.sends = JSON.stringify(ret.request.payload || {}, null, 1);
+    ret
+}
+
+
 function make_selection (arr, rand) {
     var index=0;
     return function () {
@@ -52,9 +77,7 @@ function make_selection (arr, rand) {
     }
 }
 
-var fs = require('fs');
-var mu = require('mu2');
-var balanced = require('..');
+
 
 var directories = fs.readdirSync(__dirname);
 
