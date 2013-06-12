@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Debits.refund("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4", function(err, result) {
+balanced.Debits.refund("${request['uri']}", function(err, result) {
     /* . . . */
 });
 

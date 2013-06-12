@@ -9,8 +9,8 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Customers.update("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ",
-			 { name: "Alan Turing" },
+balanced.Customers.update("${request['uri']}",
+			 { name: "${payload['name']}" },
 			 function(err, result) {
     /* . . . */
 });

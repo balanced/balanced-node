@@ -23,43 +23,48 @@ var config = {
     // different uris to use
     uri: {
 	marketplace: "${api_location}",// "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw",
-	bankAccount: "/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
-	card: "/v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
-	account: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",
-	debit: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4",
-	hold: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
-	credit: "/v1/credits/CRtRb08dbRcgATb3rTMtXei",
-	refund: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
-	event: "/v1/events/EVda9622507c9311e2b21f026ba7cac9da",
-	customer: "/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ"
+	bankAccount: "${request['uri']}",///v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
+	card: "${request['uri']}", ///v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
+	account: "${request['uri']}",///v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",
+	debit: "${request['uri']}", ///v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4",
+	hold: "${request['uri']}", ///v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
+	credit: "${request['uri']}", ///v1/credits/CRtRb08dbRcgATb3rTMtXei",
+	refund: "${request['uri']}", ///v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
+	event: "${request['uri']}", ///v1/events/EVda9622507c9311e2b21f026ba7cac9da",
+	customer: "${request['uri']}", ///v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ"
     },
 
 
 
-    name: make_selection([ "Johann Bernoulli",
+    name: "${payload['name']}",
+    /*make_selection([ "Johann Bernoulli",
 			   "Timmy Q. CopyPasta",
 			   "George Washington",
 			   "Alan Turing",
 			   "Dennis Ritchie"
-			 ]),
-    routing_number: make_selection(["321174851", "122000030", "021000021"]),
-    account_number: make_selection(["9900000001", "2345617845", "9473857386"]),
-    card: make_selection(["4111111111111111", "341111111111111", "5105105105105100"]),
+			 ])*/
+    routing_number: "${payload['routing_number']}", //make_selection(["321174851", "122000030", "021000021"]),
+    account_number: "${payload['account_number']}", //make_selection(["9900000001", "2345617845", "9473857386"]),
+    card: "${payload['card_number']}", //make_selection(["4111111111111111", "341111111111111", "5105105105105100"]),
 
-    amount: function () {
+    amount: "${payload['amount']}",
+    /*function () {
 	return Math.random().toString().substring(2,4) + "00";
-    },
-    year: function () {
+    },*/
+    year: "${payload['expiration_year']}",
+/*function () {
 	return (new Date()).getFullYear() + 5 + Math.floor(10 * Math.random());
-    },
-    month: function () {
+    }*/
+    month: "${payload['expiration_month']}",
+    /*function () {
 	return 1 + Math.floor(Math.random() * 12);
-    },
+    }*/
 
-    description: make_selection([ "Renting a bike",
+    description: "${payload['description']}"
+    /*make_selection([ "Renting a bike",
 				  "Party Supplies",
 				  "Testing balanced"
-				], true),
+				], true),*/
 };
 
 
@@ -69,14 +74,14 @@ function make_config (name) {
     ret
 }
 
-
+/*
 function make_selection (arr, rand) {
     var index=0;
     return function () {
 	return arr[rand ? Math.floor(arr.length * Math.random()) : index++ % arr.length];
     }
 }
-
+*/
 
 
 var directories = fs.readdirSync(__dirname);

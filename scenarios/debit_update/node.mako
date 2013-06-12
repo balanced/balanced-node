@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Debits.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4", { description: "Testing balanced" },
+balanced.Debits.update("${request['uri']}", { description: "${payload['description']}" },
 		      function(err, result) {
     /* . . . */
 });

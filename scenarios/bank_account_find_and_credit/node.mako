@@ -8,9 +8,9 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.BankAccounts.get("/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4", function(err, result) {
-    balanced.BankAccounts.credit(result.credits_uri, 3700,
-				"Party Supplies", function(err, result) {
+balanced.BankAccounts.get("${request['uri']}", function(err, result) {
+    balanced.BankAccounts.credit(result.credits_uri, ${payload['amount']},
+				"${payload['description']}", function(err, result) {
 				    /* . . . */
     });
 });

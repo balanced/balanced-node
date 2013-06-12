@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Refunds.create("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4", { amount: 8600 },
+balanced.Refunds.create("${request['uri']}", { amount: ${payload['amount']} },
 		       function(err, result) {
     /* . . . */
 });

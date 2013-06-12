@@ -10,9 +10,9 @@ var balanced = new balanced_library({
 });
 
 balanced.BankAccounts.create({
-    name: "Alan Turing",
-    account_number: "2345617845",
-    routing_number: "321174851",
+    name: "${payload['name']}",
+    account_number: "${payload['account_number']}",
+    routing_number: "${payload['routing_number']}",
     type: "checking"
 }, function(err, result) {
     /* . . . */

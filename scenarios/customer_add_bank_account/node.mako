@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Customers.addBankAccount("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ", "/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
+balanced.Customers.addBankAccount("${request['uri']}", "${request['uri']}",
 				 function(err, result) {
     /* . . . */
 });

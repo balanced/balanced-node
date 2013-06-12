@@ -9,8 +9,8 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Holds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
-		     { description: "Not Renting a bike" },
+balanced.Holds.update("${request['uri']}",
+		     { description: "Not ${payload['description']}" },
 		     function(err, result) {
     /* . . . */
 });

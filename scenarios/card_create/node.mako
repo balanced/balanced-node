@@ -10,10 +10,10 @@ var balanced = new balanced_library({
 });
 
 balanced.Cards.create({
-    card_number: "4111111111111111",
-    expiration_year: 2021,
-    expiration_month: 10,
-    security_code: "123"
+    card_number: "${payload['card_number']}",
+    expiration_year: ${payload['expiration_year']},
+    expiration_month: ${payload['expiration_month']},
+    security_code: ""
 }, function(err, result) {
     /* . . . */
 });

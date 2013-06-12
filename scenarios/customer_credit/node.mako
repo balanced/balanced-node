@@ -8,9 +8,9 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Customers.get("/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ", function(err, result) {
+balanced.Customers.get("${request['uri']}", function(err, result) {
     var user = balanced.Customers.nbalanced(result);
-    user.Credits.create({ amount: 5500 }, function(err, result) {
+    user.Credits.create({ amount: ${payload['amount']} }, function(err, result) {
 	/* . . . */
     });
 });

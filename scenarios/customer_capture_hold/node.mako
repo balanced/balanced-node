@@ -9,7 +9,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Holds.capture("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW", { amount: "1400" },
+balanced.Holds.capture("${request['uri']}", { amount: "${payload['amount']}" },
 		      function(err, result) {
     /* . . . */
 });

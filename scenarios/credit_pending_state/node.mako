@@ -10,11 +10,11 @@ var balanced = new balanced_library({
 });
 
 balanced.Credits.create({
-    amount: 4500,
+    amount: ${payload['amount']},
     bank_account: {
-	name: "George Washington",
-	account_number: "9473857386",
-	routing_number: "122000030",
+	name: "${payload['name']}",
+	account_number: "${payload['account_number']}",
+	routing_number: "${payload['routing_number']}",
 	type: "checking"
     }
 }, function(err, result) {

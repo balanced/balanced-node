@@ -9,8 +9,8 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Refunds.update("/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
-		       { description: "Not Testing balanced" },
+balanced.Refunds.update("${request['uri']}",
+		       { description: "Not ${payload['description']}" },
 		       function(err, result) {
     /* . . . */
 });
