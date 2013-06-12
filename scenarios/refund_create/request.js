@@ -1,4 +1,5 @@
-{{api}}.Refunds.create("{{uri.debit}}", { amount: {{amount}} },
+{{api}}.Refunds.create("{{uri.debit}}",
+		       { },
 		       function(err, result) {
     LOG
 });

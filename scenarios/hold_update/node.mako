@@ -16,8 +16,8 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Holds.update("${request['uri']}",
-		     { description: "Not ${payload['description']}" },
+balanced.Holds.update("${request['uri'] or request['hold_uri']}",
+		     { description: "Not ${payload['description'] if payload else ''}" },
 		     function(err, result) {
     /* . . . */
 });

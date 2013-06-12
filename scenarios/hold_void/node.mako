@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Holds.void("${request['uri']}", function(err, result) {
+balanced.Holds.void("${request['uri'] or request['hold_uri']}", function(err, result) {
     /* . . . */
 });
 

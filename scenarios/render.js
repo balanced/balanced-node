@@ -9,91 +9,110 @@ var scenario = process.argv[process.argv.length-1];
 console.log("Looking for scenario.cache", scenario);
 
 
-
-//var scenarios_file = fs.readFileSync(scenario).toString();
-//scenarios = JSON.parse(scenarios_file);
-//console.log(scenarios);
-//console.log(scenarios_file);
-
-
 var config = {
     api: "balanced", // the name of the api object to use
     user: "user",
-    secret: "${ctx.api_key}", //"3c49b172ca1611e29e4e026ba7f8ec28",
+    secret: "${ctx.api_key}",
     // different uris to use
     uri: {
 	marketplace: "${ctx.marketplace_uri}",
-	bankAccount: "${request['uri']}",///v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
-	card: "${request['uri']}", ///v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
-	account: "${request['uri']}",///v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",
-	debit: "${request['uri']}", ///v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4",
-	hold: "${request['uri']}", ///v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
-	credit: "${request['uri']}", ///v1/credits/CRtRb08dbRcgATb3rTMtXei",
-	refund: "${request['uri']}", ///v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
-	event: "${request['uri']}", ///v1/events/EVda9622507c9311e2b21f026ba7cac9da",
-	customer: "${request['uri']}", ///v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ"
+	bankAccount: "${request['uri']}",
+	card: "${request['uri']}",
+	account: "${request['uri']}",
+	debit: "${request['uri']}",
+	hold: "${request['uri'] or request['hold_uri']}",
+	credit: "${request['uri']}",
+	refund: "${request['uri']}",
+	event: "${request['uri']}",
+	customer: "${request['uri']}",
+    },
+
+    json: {
+	merchant: "${to_json( payload['merchant'] ) | n }",
+	request: "${to_json( request ) | n }"
+    },
+
+    name: "${payload['name'] if payload else request['bank_account']['name']}",
+
+    routing_number: "${payload['routing_number'] if payload else request['bank_account']['routing_number']}",
+    account_number: "${payload['account_number'] if payload else request['bank_account']['account_number']}",
+    card: "${payload['card_number']}",
+
+    amount: "${payload['amount'] if payload else request['amount'] or '1100'}",
+
+    year: "${payload['expiration_year']}",
+    month: "${payload['expiration_month']}",
+    description: "${payload['description'] if payload else ''}"
+};
+
+// this config is used with the templates for when we are building the scenarios to run
+var config_run = {
+    api: "balanced", // the name of the api object to use
+    user: "user",
+    secret: "3c49b172ca1611e29e4e026ba7f8ec28",
+    // different uris to use
+    uri: {
+	marketplace: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw",
+	bankAccount: "/v1/bank_accounts/BA7MzJVqI9vsOl4FGqOowxg4",
+	card: "/v1/marketplaces/TEST-MP7KGu1qSh88k1ka9w6FvXZu/cards/CCg1bA1f1o1PEdmOweZjxYy",
+	account: "/v1/marketplaces/TEST-MP1Qgo2GJ01p1Unq365Gq8Hw/accounts/ACqnnofIf2xQlmUq12EZ7bh",
+	debit: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/debits/WDEBPPEakDQzIE6T5YVjKC4",
+	hold: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/holds/HLEEkOOAHJAU5SCfR5fi7TW",
+	credit: "/v1/credits/CRtRb08dbRcgATb3rTMtXei",
+	refund: "/v1/marketplaces/TEST-MP6E3EVlPOsagSdcBNUXWBDQ/refunds/RF1bNMx3J48PAiYNJMga00YE",
+	event: "/v1/events/EVda9622507c9311e2b21f026ba7cac9da",
+	customer: "/v1/customers/CU4Ge9p0xB21u0QcFv55rMHJ"
     },
 
 
 
-    name: "${payload['name']}",
-    /*make_selection([ "Johann Bernoulli",
+    name: make_selection([ "Johann Bernoulli",
 			   "Timmy Q. CopyPasta",
 			   "George Washington",
 			   "Alan Turing",
 			   "Dennis Ritchie"
-			 ])*/
-    routing_number: "${payload['routing_number']}", //make_selection(["321174851", "122000030", "021000021"]),
-    account_number: "${payload['account_number']}", //make_selection(["9900000001", "2345617845", "9473857386"]),
-    card: "${payload['card_number']}", //make_selection(["4111111111111111", "341111111111111", "5105105105105100"]),
+			 ]),
+    routing_number: make_selection(["321174851", "122000030", "021000021"]),
+    account_number: make_selection(["9900000001", "2345617845", "9473857386"]),
+    card: make_selection(["4111111111111111", "341111111111111", "5105105105105100"]),
 
-    amount: "${payload['amount']}",
-    /*function () {
+    amount: function () {
 	return Math.random().toString().substring(2,4) + "00";
-    },*/
-    year: "${payload['expiration_year']}",
-/*function () {
+    },
+    year: function () {
 	return (new Date()).getFullYear() + 5 + Math.floor(10 * Math.random());
-    }*/
-    month: "${payload['expiration_month']}",
-    /*function () {
+    },
+    month: function () {
 	return 1 + Math.floor(Math.random() * 12);
-    }*/
+    },
 
-    description: "${payload['description']}"
-    /*make_selection([ "Renting a bike",
+    description: make_selection([ "Renting a bike",
 				  "Party Supplies",
 				  "Testing balanced"
-				], true),*/
+				], true),
 };
 
 
-function make_config (name) {
-    var ret = scenario[name];
-    ret.sends = JSON.stringify(ret.request.payload || {}, null, 1);
-    ret
-}
 
-/*
 function make_selection (arr, rand) {
     var index=0;
     return function () {
 	return arr[rand ? Math.floor(arr.length * Math.random()) : index++ % arr.length];
     }
 }
-*/
+
 
 
 var directories = fs.readdirSync(__dirname);
 
 // remove this file from the list
 directories.splice(directories.indexOf('render.js'), 1);
-directories.splice(directories.indexOf('peramble.js'), 1);
+directories.splice(directories.indexOf('preamble.js'), 1);
 
 var preamble = "";
 var preamble_run = ""
 
-function process_save(dir,definition,request) {
+function process_save(dir,definition,request,runner) {
     var result =
 	"% if mode == 'definition': \n"
 	+ definition + "\n"
@@ -104,7 +123,7 @@ function process_save(dir,definition,request) {
     var code =
 	preamble_run + "\n"
 	+ "function run () { \n"
-	+ request.replace(/LOG/g, "console.log(arguments);\n")
+	+ runner.replace(/LOG/g, "console.log(arguments);\n")
 	+ " \n }";
     fs.writeFile(__dirname+'/'+dir+'/node.mako', result, function(err) {
 	if(err)
@@ -119,13 +138,21 @@ function process_save(dir,definition,request) {
 }
 
 function process_request (dir, definition) {
-    var job = mu.compileAndRender(__dirname+'/'+dir+'/request.js', config);
-    var dd = "";
-    job.on('data', function(d) {
-	dd += d.toString();
-    });
-    job.on('end', function(request) {
-	process_save(dir, definition, dd);
+    mu.compile(__dirname+'/'+dir+'/request.js', function(err, template) {
+	var job = mu.render(template, config);
+	var dd = "";
+	job.on('data', function(d) {
+	    dd += d.toString();
+	});
+	job.on('end', function(request) {
+	    //process_save(dir, definition, dd);
+	    var job2 = mu.render(template, config_run);
+	    var rr = "";
+	    job2.on('data', function(d) { rr += d.toString(); });
+	    job2.on('end', function() {
+		process_save(dir, definition, dd, rr);
+	    });
+	});
     });
 }
 
@@ -147,25 +174,25 @@ function process_dir(dir) {
 		if(contents.indexOf('request.js') != -1) {
 		    process_request(dir, dd);
 		}else{
-		    process_save(dir, dd, "");
+		    process_save(dir, dd, "", "");
 		}
 	    });
 	}else if(contents.indexOf('request.js') != -1) {
-	    process_request(dir, "");
+	    process_request(dir, "", "");
 	}else{
-	    process_save(dir, "", "");
+	    process_save(dir, "", "", "");
 	}
     });
 }
 
 function start_generate() {
-    var preamble_job = mu.compileAndRender(__dirname + '/peramble.js', config);
+    var preamble_job = mu.compileAndRender(__dirname + '/preamble.js', config);
     preamble_job.on('data', function(d) {
 	preamble += d.toString();
     });
 
     preamble_job.on('end', function () {
-	var preamble_job_run = mu.compileAndRender(__dirname + '/peramble-run.js', config);
+	var preamble_job_run = mu.compileAndRender(__dirname + '/preamble-run.js', config_run);
 	preamble_job_run.on('data', function(d) {
 	    preamble_run += d.toString();
 	});
@@ -179,5 +206,3 @@ function start_generate() {
 
 
 start_generate();
-
-console.log(this, __dirname);

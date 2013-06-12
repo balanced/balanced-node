@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Debits.refund("${request['uri']}", function(err, result) {
+balanced.Debits.refund("${request['debit_uri']}", function(err, result) {
     /* . . . */
 });
 

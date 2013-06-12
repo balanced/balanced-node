@@ -17,7 +17,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Debits.create({
-    amount: ${payload['amount']},
+    amount: ${payload['amount'] if payload else request['amount'] or '1100'},
     source_uri: "${request['uri']}"
 }, function(err, result) {
     /* . . . */

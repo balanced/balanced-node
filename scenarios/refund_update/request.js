@@ -1,5 +1,5 @@
 {{api}}.Refunds.update("{{uri.refund}}",
-		       { description: "Not {{description}}" },
+		       { description: "{{description}}" },
 		       function(err, result) {
     LOG
 });

@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Holds.capture("${request['uri']}", { amount: "${payload['amount']}" },
+balanced.Holds.capture("${request['uri'] or request['hold_uri']}", { amount: "${payload['amount'] if payload else request['amount'] or '1100'}" },
 		      function(err, result) {
     /* . . . */
 });

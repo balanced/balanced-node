@@ -17,7 +17,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Customers.update("${request['uri']}",
-			 { name: "${payload['name']}" },
+			 { name: "${payload['name'] if payload else request['bank_account']['name']}" },
 			 function(err, result) {
     /* . . . */
 });

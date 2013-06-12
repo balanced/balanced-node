@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Debits.update("${request['uri']}", { description: "${payload['description']}" },
+balanced.Debits.update("${request['uri']}", { description: "${payload['description'] if payload else ''}" },
 		      function(err, result) {
     /* . . . */
 });

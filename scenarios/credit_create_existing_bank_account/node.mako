@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Credits.add("${request['uri']}", ${payload['amount']}, "${payload['description']}",
+balanced.Credits.add("${request['uri']}", ${payload['amount'] if payload else request['amount'] or '1100'}, "",
 		    function(err, result) {
     /* . . . */
 });

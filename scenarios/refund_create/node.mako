@@ -16,7 +16,8 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Refunds.create("${request['uri']}", { amount: ${payload['amount']} },
+balanced.Refunds.create("${request['uri']}",
+		       { },
 		       function(err, result) {
     /* . . . */
 });

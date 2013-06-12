@@ -1,4 +1,4 @@
-{{api}}.Credits.add("{{uri.bankAccount}}", {{amount}}, "{{description}}",
+{{api}}.Credits.add("{{uri.bankAccount}}", {{amount}}, "",
 		    function(err, result) {
     LOG
 });

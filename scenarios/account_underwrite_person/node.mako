@@ -16,8 +16,8 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Accounts.underwrite(${to_json( payload['merchant'] ) | n }
-, function(err, result) {
+balanced.Accounts.underwrite(${to_json( payload['merchant'] ) | n },
+			    function(err, result) {
     /* . . . */
 });
 

@@ -17,7 +17,7 @@ var balanced = new balanced_library({
 
 balanced.Accounts.get("${request['uri']}", function(err, result) {
     var user = balanced.Accounts.nbalanced(result);
-    user.Debits.create({ amount: ${payload['amount']} }, function(err, result) {
+    user.Debits.create({ amount: ${payload['amount'] if payload else request['amount'] or '1100'} }, function(err, result) {
 	/* . . . */
     });
 });
