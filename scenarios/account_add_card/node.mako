@@ -17,7 +17,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Accounts.addCard("${request['uri']}",
-			 "${request['uri']}",
+			 "${request.get('uri', request.get('debits_uri',''))}",
 			 function(err, result) {
     /* . . . */
 });

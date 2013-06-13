@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Cards.invalidate("${request['uri']}", function(err, result) {
+balanced.Cards.invalidate("${request.get('uri', request.get('debits_uri',''))}", function(err, result) {
     /* . . . */
 });
 

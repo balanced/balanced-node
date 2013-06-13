@@ -17,10 +17,10 @@ var config = {
     uri: {
 	marketplace: "${ctx.marketplace_uri}",
 	bankAccount: "${request['uri']}",
-	card: "${request['uri']}",
+	card: "${request.get('uri', request.get('debits_uri',''))}",
 	account: "${request['uri']}",
 	debit: "${request['uri']}",
-	hold: "${request['uri'] or request['hold_uri']}",
+	hold: "${request.get('uri',  request.get('hold_uri', ''))}",
 	credit: "${request['uri']}",
 	refund: "${request['uri']}",
 	event: "${request['uri']}",
@@ -42,7 +42,16 @@ var config = {
 
     year: "${payload['expiration_year']}",
     month: "${payload['expiration_month']}",
-    description: "${payload['description'] if payload else ''}"
+    description: "${ payload.get('description') if 'payload' in locals() else request['payload']['description'] }",
+/*"${ if 'payload in locals():"
+	+"  payload.get('description')"
+	+"elif 'request' in locals():"
+	+"  request['payload']['description']"
+	+"else:"
+	+"  ''}",*/
+//payload.get('description') if 'payload' in locals() el 'request' in locals()
+    //"${payload.get('description') if 'payload' in locals() else request.get('payload',{}).get('description') if }",
+    appears_on_statement_as: "${request['payload']['appears_on_statement_as']}"
 };
 
 // this config is used with the templates for when we are building the scenarios to run
@@ -90,6 +99,7 @@ var config_run = {
 				  "Party Supplies",
 				  "Testing balanced"
 				], true),
+    appears_on_statement_as: "what up???"
 };
 
 

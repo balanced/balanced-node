@@ -17,7 +17,7 @@ var balanced = new balanced_library({
 
 balanced.BankAccounts.get("${request['uri']}", function(err, result) {
     balanced.BankAccounts.credit(result.credits_uri, ${payload['amount'] if payload else request['amount'] or '1100'},
-				"${payload['description'] if payload else ''}", function(err, result) {
+				"", function(err, result) {
 				    /* . . . */
     });
 });

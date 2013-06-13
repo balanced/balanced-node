@@ -16,8 +16,8 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Holds.capture("${request['uri'] or request['hold_uri']}",
-    description: "${request['payload']['description']}",
+balanced.Holds.capture("${request.get('uri',  request.get('hold_uri', ''))}",
+    description: "${ payload.get('description') if 'payload' in locals() else request['payload']['description'] }",
     appears_on_statement_as: "${request['payload']['appears_on_statement_as']}"
 },
 		      function(err, result) {

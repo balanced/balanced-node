@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Accounts.addCard("${request['uri']}", "${request['uri']}", function(err, result) {
+balanced.Accounts.addCard("${request['uri']}", "${request.get('uri', request.get('debits_uri',''))}", function(err, result) {
     /* . . . */
 });
 

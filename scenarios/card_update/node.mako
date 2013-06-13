@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Cards.update("${request['uri']}", { twitter: "123456789" },
+balanced.Cards.update("${request.get('uri', request.get('debits_uri',''))}", { twitter: "123456789" },
 		     function(err, result) {
     /* . . . */
 });

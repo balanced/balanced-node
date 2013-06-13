@@ -17,7 +17,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Refunds.update("${request['uri']}",
-		       { description: "${payload['description'] if payload else ''}" },
+		       { description: "${ payload.get('description') if 'payload' in locals() else request['payload']['description'] }" },
 		       function(err, result) {
     /* . . . */
 });
