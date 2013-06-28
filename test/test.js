@@ -172,6 +172,16 @@ series([
             next("api.Cards.create2");
         });
     },
+    function (next) {
+        api.Cards.delete(myCard.uri, function (err) {
+            if (err) {
+                console.error("api.Cards.delete", err);
+                throw err;
+            }
+            console.log("Deleted Cards:", myCard.uri);
+            next("api.Cards.delete");
+        });
+    },
 
 
 
