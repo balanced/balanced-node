@@ -1,5 +1,5 @@
-% if mode == 'definition': 
-balanced.BankAccounts.delete
+% if mode == 'definition':
+balanced.BankAccounts.unsore
 
 % else:
 <%!
@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.BankAccounts.delete("${request['uri']}", function (err, result) {
+balanced.BankAccounts.unstore("${request['uri']}", function (err, result) {
     /* . . . */
 });
 

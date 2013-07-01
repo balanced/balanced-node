@@ -1,5 +1,5 @@
 % if mode == 'definition':
-balanced.Cards.delete
+balanced.Cards.unstore
 
 % else:
 <%!
@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Cards.delete("${request['uri']}", function (err, result) {
+balanced.Cards.unstore("${request['uri']}", function (err, result) {
     /* . . . */
 });
 

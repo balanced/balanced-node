@@ -1,1 +1,1 @@
-{{api}}.Cards.delete
+{{api}}.Cards.unstore
