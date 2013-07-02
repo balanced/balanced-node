@@ -63,6 +63,7 @@ var myAccount;
 var myAccountBankAccount;
 var myCustomer;
 var myAccountCard;
+var myReversal;
 var myEvent;
 
 // Start our asynchronous dependency execution test chain
@@ -1179,6 +1180,30 @@ series([
             console.log("Updated Refund:", object.uri);
             next("api.Refunds.update");
         });
+    },
+
+    // ***********************************************************
+    // Reversals
+    // ***********************************************************
+    function (next) {
+	api.Reversals.create(myCredit, function (err, object) {
+	    debugger;
+	    if(err && err.category_code == "cannot-reverse-credit") {
+		// the credit needs to be in the success state
+		// and testing environments might not update
+		// for a few moments
+		// In a production system, a credit might take over
+		// 24 hours to go to a success state
+		return next("api.Reversals.create");
+	    }
+
+	    if(err) {
+		console.error("api.Reversals.create", err);
+		throw err;
+	    }
+	    myReversal = object;
+	    next("api.Reversals.create");
+	});
     },
 
 
