@@ -1051,7 +1051,7 @@ series([
         });
     },
     function (next) {
-        api.Credits.add(myAccountBankAccount.credits_uri, 3400, "Have some free money", function (err, object) {
+        api.Credits.add(myAccountBankAccount.credits_uri, { amount: 3400, description: "Have some free money" }, function (err, object) {
             if (err) {
                 console.error("api.Credits.add", err);
                 throw err;
