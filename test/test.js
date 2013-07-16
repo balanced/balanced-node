@@ -1051,13 +1051,23 @@ series([
         });
     },
     function (next) {
-        api.Credits.add(myAccountBankAccount.credits_uri, { amount: 3400, description: "Have some free money" }, function (err, object) {
+        api.Credits.add(myAccountBankAccount.credits_uri, 3400, "Have some free money", function (err, object) {
             if (err) {
                 console.error("api.Credits.add", err);
                 throw err;
             }
             console.log("Credit Bank Account", object.uri);
             next("api.Credits.add");
+        });
+    },
+    function (next) {
+        api.Credits.add(myAccountBankAccount.credits_uri, { amount: 3400, description: "Have some free money", appears_on_statement_as: "ACME Corp" },  function (err, object) {
+            if (err) {
+                console.error("api.Credits.add2", err);
+                throw err;
+            }
+            console.log("Credit Bank Account", object.uri);
+            next("api.Credits.add2");
         });
     },
     // This is here because we have to have money from a prior sequence before we can test this shortcut
