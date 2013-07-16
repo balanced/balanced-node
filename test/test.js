@@ -423,6 +423,17 @@ series([
         });
     },
     function (next) {
+        api.Customers.getCards(myCustomer.uri, function(err, object) {
+            if (err) {
+                console.error("api.Customers.getCards", err);
+                throw err;
+            }
+
+            console.log("Fetched Cards for Customer:", object.items.length, "total");
+            next("api.Customer.getCards");
+        });
+    },
+    function (next) {
         api.BankAccounts.create({
             name: "Customer Bank Account",
             account_number: "9900000002",
