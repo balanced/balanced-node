@@ -1226,13 +1226,14 @@ series([
 	    type: "checking"
 	}, function (err, object){
 	    if(err) {
-		console.error("api.BankAccount.create reversals");
+		console.error("api.BankAccount.create reversals", err);
 		throw err;
 	    }
 	    myBankAccount = object;
 	    api.Credits.add(myBankAccount.account.credits_uri, 1234, function (err, object){
+		debugger;
 		if(err) {
-		    console.error("api.Credits.add reversals");
+		    console.error("api.Credits.add reversals", err);
 		    throw err;
 		}
 		myCredit = object;
