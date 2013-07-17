@@ -460,6 +460,17 @@ series([
             next("api.Customers.addBankAccount");
         });
     },
+    function (next) {
+        api.Customers.getBankAccounts(myCustomer.uri, function(err, object) {
+            if (err) {
+                console.error("api.Customers.getBankAccounts", err);
+                throw err;
+            }
+
+            console.log("Fetched Bank Accounts for Customer:", object.items.length, "total");
+            next("api.Customer.getBankAccounts");
+        });
+    },
     //
     // test the Customers api scoped to a particular customer
     //
