@@ -25,6 +25,7 @@ var config = {
 	refund: "${request['uri']}",
 	event: "${request['uri']}",
 	customer: "${request['uri']}",
+	reversal: "${request['uri']}"
     },
 
     json: {

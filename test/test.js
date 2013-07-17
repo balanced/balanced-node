@@ -1035,8 +1035,8 @@ series([
         api.Credits.create({
             amount: 100,
             bank_account: {
-                routing_number: "121000358",
-                account_number: "9900000001",
+                routing_number: "021000021",
+                account_number: "9900000002",
                 type: "checking",
                 name: "Jennifer Aston"
             }
@@ -1185,26 +1185,72 @@ series([
     // ***********************************************************
     // Reversals
     // ***********************************************************
+    function (next){
+	console.log("creating dummy data for reversals");
+	api.BankAccounts.create({
+	    name: "lolz master",
+	    routing_number:   "321174851",
+	    account_number:"9900000003",
+	    type: "checking"
+	}, function (err, object){
+	    if(err) {
+		console.error("api.BankAccount.create reversals");
+		throw err;
+	    }
+	    myBankAccount = object;
+	    api.Credits.add(myBankAccount.account.credits_uri, 1234, function (err, object){
+		if(err) {
+		    console.error("api.Credits.add reversals");
+		    throw err;
+		}
+		myCredit = object;
+		api = new nbalanced(config);
+		next("api.Reversals setup");
+	    });
+
+	});
+    },
     function (next) {
 	api.Reversals.create(myCredit, function (err, object) {
-	    debugger;
-	    if(err && err.category_code == "cannot-reverse-credit") {
-		// the credit needs to be in the success state
-		// and testing environments might not update
-		// for a few moments
-		// In a production system, a credit might take over
-		// 24 hours to go to a success state
-		return next("api.Reversals.create");
-	    }
-
 	    if(err) {
 		console.error("api.Reversals.create", err);
 		throw err;
 	    }
 	    myReversal = object;
+	    console.log("Reversal created: ", object.uri);
 	    next("api.Reversals.create");
 	});
     },
+    function (next){
+	api.Reversals.get(myReversal.uri, function (err, object){
+	    if(err) {
+		console.err("api.Reversals.get", err);
+		throw err;
+	    }
+	    next("api.Reversals.get");
+	});
+    },
+    function (next){
+	api.Reversals.list(function (err, object){
+	    if(err) {
+		console.error("api.Reversals.list", err);
+		throw err;
+	    }
+	    next("api.Reversals.list");
+	})
+    },
+    function (next){
+	api.Reversals.update(myReversal.uri, { 'description': 'new test' }, function (err, result){
+	    if(err){
+		console.error("api.Reversals.update", err);
+		throw err;
+	    }
+	    next("api.Reversals.update");
+	})
+    },
+
+
+
 
 
 
