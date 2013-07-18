@@ -65,6 +65,7 @@ var myCustomer;
 var myAccountCard;
 var myReversal;
 var myEvent;
+var myCard2;
 
 // Start our asynchronous dependency execution test chain
 series([
