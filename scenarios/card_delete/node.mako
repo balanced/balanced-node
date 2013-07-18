@@ -1,4 +1,4 @@
-% if mode == 'definition':
+% if mode == 'definition': 
 balanced.Cards.unstore
 
 % else:
@@ -16,7 +16,7 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Cards.unstore("${request['uri']}", function (err, result) {
+balanced.Cards.unstore("${request.get('uri', request.get('debits_uri',''))}", function (err, result) {
     /* . . . */
 });
 

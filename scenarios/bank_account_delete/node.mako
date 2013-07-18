@@ -1,5 +1,5 @@
-% if mode == 'definition':
-balanced.BankAccounts.unsore
+% if mode == 'definition': 
+balanced.BankAccounts.unstore
 
 % else:
 <%!
