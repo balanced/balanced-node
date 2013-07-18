@@ -173,7 +173,7 @@ series([
         });
     },
     function (next) {
-        api.Cards.delete(myCard.uri, function (err) {
+        api.Cards.unstore(myCard.uri, function (err) {
             if (err) {
                 console.error("api.Cards.delete", err);
                 throw err;
@@ -210,7 +210,7 @@ series([
         });
     },
     function (next) {
-        api.BankAccounts.delete(myBankAccount.uri, function (err) {
+        api.BankAccounts.unstore(myBankAccount.uri, function (err) {
             if (err) {
                 console.error("api.BankAccounts.delete", err);
                 throw err;
