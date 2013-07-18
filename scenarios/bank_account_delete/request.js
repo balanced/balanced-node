@@ -1,3 +1,3 @@
-{{api}}.BankAccounts.delete("{{uri.bankAccount}}", function (err, result) {
+{{api}}.BankAccounts.unstore("{{uri.bankAccount}}", function (err, result) {
     LOG
 });

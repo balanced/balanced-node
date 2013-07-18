@@ -1,1 +1,1 @@
-{{api}}.BankAccounts.delete
+{{api}}.BankAccounts.unstore
