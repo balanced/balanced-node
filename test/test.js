@@ -173,6 +173,40 @@ series([
             next("api.Cards.create2");
         });
     },
+    function (next) {
+        api.Cards.create({
+            card_number: "5105105105105100",
+            expiration_year: 2020,
+            expiration_month: 12,
+            security_code: "123"
+        }, function (err, object) {
+            if (err) {
+                console.error("api.Cards.create", err);
+                throw err;
+            }
+            myCard2 = object;
+            console.log("Created new Card:", myCard.uri);
+            next("api.Cards.create");
+        });
+    },
+    function (next) {
+        api.Cards.unstore(myCard2.uri, function (err) {
+            debugger;
+            if (err) {
+                console.error("api.Cards.unstore", err);
+                throw err;
+            }
+            console.log("Unstored Cards:", myCard2.uri);
+            next("api.Cards.unstore");
+        });
+    },
+    function (next) {
+        api.Cards.get(myCard2.uri, function (err, object) {
+            assert(err);
+            console.log("Get a deleted card:", myCard2.uri);
+            next("api.Cards.get deleted card");
+        });
+    },
 
 
 
@@ -201,13 +235,40 @@ series([
         });
     },
     function (next) {
-        api.BankAccounts.delete(myBankAccount.uri, function (err) {
+        api.BankAccounts.create({
+            name: "Miranda Benz",
+            account_number: "9900826301",
+            routing_number: "121000359",
+            type: "checking",
+            meta: {
+                info: "created another test account",
+                test: true
+            }
+        }, function (err, object) {
             if (err) {
-                console.error("api.BankAccounts.delete", err);
+                console.error("api.BankAccounts.create2", err);
+                throw err;
+            }
+            myBankAccount2 = object;
+            console.log("Created new Bank Account:", myBankAccount2.uri);
+            next("api.BankAccounts.create2");
+        });
+    },
+    function (next) {
+        api.BankAccounts.unstore(myBankAccount2.uri, function (err) {
+            if (err) {
+                console.error("api.BankAccounts.unstore", err);
                 throw err;
             }
             console.log("Deleted Bank Account:", myBankAccount.uri);
-            next("api.BankAccounts.delete");
+            next("api.BankAccounts.unstore");
+        });
+    },
+    function (next) {
+        api.BankAccounts.get(myBankAccount2.uri, function (err, object) {
+            assert(err);
+            console.log("Retrieved a deleted Bank Account:", myBankAccount2.uri);
+            next("api.BankAccounts.get deleted bank account");
         });
     },
     function (next) {
