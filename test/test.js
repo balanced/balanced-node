@@ -334,14 +334,47 @@ series([
         });
     },
     function (next) {
-        api.BankAccounts.verify(myBankAccount.verifications_uri, function (err, object) {
-            if (err) {
-                console.error("api.BankAccounts.verify", myBankAccount.verifications_uri, " >> ", JSON.stringify(err));
+        api.Customers.create({
+            name: "Philosorapter 9000",
+            email: "philosorapter@example.com",
+            meta: {
+                "customKey.first": "first",
+                "customKey.second": "second"
+            },
+            ssn_last4: "1234",
+            business_name: "Internet Memes LLC",
+            address: {
+                line1: "123 Main St",
+                line2: "Apt. 1",
+                city: "San Francisco",
+                state: "CA",
+                postal_code: "94133",
+                country_code: "USA"
+            },
+            phone: "+19994445555",
+            dob: "1984-01",
+            ein: "451111111"
+            //, facebook: ""
+            //, twitter: ""
+        }, function (err, object) {
+            if(err){
+                console.error("api.Customers.create", err);
                 throw err;
             }
-            myVerification = object;
-            console.log("Verify Bank Account", myVerification.uri);
-            next("api.BankAccounts.verify");
+            myCustomer = object;
+            // console.log(myCustomer);
+            console.log("Created new Customer:", myCustomer.uri);
+            api.Customers.addBankAccount(myCustomer.uri, myBankAccount.uri, function(err, result) {
+                api.BankAccounts.verify(myBankAccount.verifications_uri, function (err, object) {
+                    if (err) {
+                        console.error("api.BankAccounts.verify", myBankAccount.verifications_uri, " >> ", JSON.stringify(err));
+                        throw err;
+                    }
+                    myVerification = object;
+                    console.log("Verify Bank Account", myVerification.uri);
+                    next("api.BankAccounts.verify");
+                });
+            });
         });
     },
     function (next) {
