@@ -1,5 +1,5 @@
 % if mode == 'definition': 
-user.Debits.create
+customerContext.Debits.create(debitInfo, callback)
 
 % else:
 <%!
@@ -16,10 +16,21 @@ var balanced = new balanced_library({
     secret: "${ctx.api_key}"
 });
 
-balanced.Customers.get("${request['uri']}", function (err, result) {
-    var user = balanced.Customers.balanced(result);
-    user.Debits.create({ amount: "${payload['amount'] if payload else request['amount'] or '1100'}" }, function(err, result) {
-	/* . . . */
+var customer = balanced.Customers.get("${request['customer_uri']}", function (err, customer) {
+    console.error(err);
+    console.log(customer);
+
+    var customerContext = balanced.Customers.balanced(customer);
+
+    var debitInfo = {
+        amount: "${request.get('payload').get('amount')}",
+        appears_on_statement_as: "${request.get('payload').get('appears_on_statement_as')}"
+        description: "${request.get('payload').get('description')}"
+    };
+
+    customerContext.Debits.create(debitInfo, function(err, result) {
+        console.error(err);
+        console.log(result);
     });
 });
 
