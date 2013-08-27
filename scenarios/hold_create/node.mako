@@ -17,7 +17,7 @@ var balanced = new balanced_library({
 });
 
 balanced.Holds.create({
-    source_uri: "${ request['account_uri'] }",
+    source_uri: "${ request['customer_uri'] }",
     amount: ${payload['amount'] if payload else request['amount'] or '1100'}
 }, function(err, result) {
     /* . . . */
