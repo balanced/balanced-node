@@ -18,12 +18,12 @@ var balanced = new balanced_library({
 
 balanced.Credits.create({
     bank_account: {
-	name: "${payload['name'] if payload else request['bank_account']['name']}",
-	account_number: "${payload['account_number'] if payload else request['bank_account']['account_number']}",
-	routing_number: "${payload['routing_number'] if payload else request['bank_account']['routing_number']}"
+	name: "${payload['bank_account']['name'] if payload else request['payload']['bank_account']['name']}",
+	account_number: "${payload['bank_account']['account_number'] if payload else request['payload']['bank_account']['account_number']}",
+	routing_number: "${payload['bank_account']['routing_number'] if payload else request['payload']['bank_account']['routing_number']}"
 	type: "Checking"
     },
-    amount: "${payload['amount'] if payload else request['amount'] or '1100'}"
+    amount: "${payload['amount'] if payload else request['payload']['amount'] or '1100'}"
 }, function(err, result) {
     /* . . . */
 });
