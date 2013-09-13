@@ -29,7 +29,7 @@ function main() {
       objectArray.push(createFunction(keys[j], runner));
     }
   }
-  console.log(objectArray);
+  console.log('Please be patient, building tests...');
   async.series(objectArray, function(err, results) {
     if(err) {
       console.log('\n\n----- Running: ' + err.name + ' -----\n\n');
@@ -61,6 +61,26 @@ function createFunction(func, runner) {
         }
         pathPieces[i] = newVar;
         action.path = pathPieces.join('/');
+      }
+    }
+    /*
+      Parse any data variables here.
+    */
+    if(action.data) {
+      var dataKeys = Object.keys(action.data);
+      for(i = 0; i < dataKeys.length; i++) {
+        var d = action.data[dataKeys[i]];
+        if(typeof d !== 'string') {
+          continue;
+        }
+        if(d.indexOf(':') >= 0) {
+          var variablePieces = d.substr(1).split('.');
+          var newVar = testObjects;
+          for(var j = 0; j < variablePieces.length; j++) {
+            newVar = newVar[variablePieces[j]];
+          }
+          action.data[dataKeys[i]] = newVar;
+        }
       }
     }
     new Request().request(action.path, action.method, action.data, function(err, res) {

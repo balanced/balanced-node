@@ -15,6 +15,19 @@ module.exports = {
     list: {
       path: ':marketplace_uri/cards',
       method: 'get'
+    },
+    retreive: {
+      path: ':marketplace_uri/cards/:cards.create.id',
+      method: 'get'
+    },
+    update: {
+      path: ':marketplace_uri/cards/:cards.create.id',
+      method: 'put',
+      data: {
+        meta: {
+          my_custom_id: '12345'
+        }
+      }
     }
   }
 }
