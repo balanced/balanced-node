@@ -2,7 +2,7 @@ var https       = require('https'),
     fs          = require('fs'),
     util        = require('util'),
     async       = require('async'),
-    balanced    = require('../lib/nbalanced'),
+    balanced    = require('../lib_new/balanced'),
     config      = require('./definitions.js'),
     hostname    = 'api.balancedpayments.com',
     testDir     = '/run',
@@ -183,30 +183,6 @@ function Request() {
     }
     
     req.end();
-  };
-  
-  $scope.get = function(path, data, callback) {
-    if(arguments.length < 3) {
-      callback = data;
-      data = null;
-    }
-    $scope.request($scope.config.access_token, path, 'get', data, callback);
-  };
-  
-  $scope.post = function(path, data, callback) {
-    $scope.request($scope.config.access_token, path, 'post', data, callback);
-  };
-  
-  $scope.put = function(path, data, callback) {
-    $scope.request($scope.config.access_token, path, 'put', data, callback);
-  };
-  
-  $scope.delete = function(path, data, callback) {
-    if(arguments.length < 3) {
-      callback = data;
-      data = null;
-    }
-    $scope.request($scope.config.access_token, path, 'delete', data, callback);
   };
   
   return $scope;

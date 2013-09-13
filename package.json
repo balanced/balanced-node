@@ -27,5 +27,7 @@
     "mu2": "*",
     "async": "~0.2.9"
   },
-  "dependencies": {}
+  "dependencies": {
+    "extend": "~1.2.0"
+  }
 }
