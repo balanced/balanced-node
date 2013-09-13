@@ -6,36 +6,41 @@ var https       = require('https'),
     config      = require('./definitions.js'),
     hostname    = 'api.balancedpayments.com',
     testDir     = '/run',
-    testObjects = {};
+    testObjects = {
+      marketplace_uri: config.marketplace_uri,
+      secret: config.secret
+    }
+    runners     = [];
     
 function main() {
-  fs.readdir(__dirname + testDir, function(err, files) {
+  var tests = fs.readdirSync(__dirname + testDir);
+  
+  for(var i = 0; i < tests.length; i++) {
+    runners.push(require(__dirname + testDir + '/' + tests[i]));
+  }
+
+  var objectArray = [];
+  for(i = 0; i < runners.length; i++) {
+    var runner = runners[i];
+    testObjects[runner.variable] = {};
+    var keys = Object.keys(runner.functions);
+    for(var j = 0; j < keys.length; j++) {
+      testObjects[runner.variable][keys[j]] = {};
+      objectArray.push(createFunction(keys[j], runner));
+    }
+  }
+  console.log(objectArray);
+  async.series(objectArray, function(err, results) {
     if(err) {
-      console.log(err);
+      console.log('\n\n----- Running: ' + err.name + ' -----\n\n');
+      console.log('    -- [ERROR]' + err.func + ':\n');
+      console.log(err.err);
       return;
     }
-    for(var i = 0; i < files.length; i++) {
-      var runner = require(__dirname + testDir + '/' + files[i]);
-      console.log('\n\n----- Running: ' + runner.name + ' -----\n\n');
-      testObjects[runner.variable] = {};
-      var objectArray = [];
-      var keys = Object.keys(runner.functions);
-      for(var j = 0; j < keys.length; j++) {
-        testObjects[runner.variable][keys[j]] = {};
-        objectArray.push(createFunction(keys[j], runner));
-      }
-      async.series(objectArray, function(err, results) {
-        if(err) {
-          console.log('\n\n    -- [ERROR]' + err.func + ':\n');
-          console.log(err.err);
-          return;
-        }
-        for(var j = 0; j < results.length; j++) {
-          console.log('\n\n    -- ' + results[j].func + ':\n');
-          console.log(results[j].res);
-          
-        }
-      });
+    for(var j = 0; j < results.length; j++) {
+      console.log('\n\n----- Running: ' + results[j].name + ' -----\n\n');
+      console.log('    -- ' + results[j].func + ':\n');
+      console.log(results[j].res);
     }
   });
 }
@@ -61,12 +66,14 @@ function createFunction(func, runner) {
     new Request().request(action.path, action.method, action.data, function(err, res) {
       if(err) {
         var ret = {
+          name: runner.name,
           func: func,
           err: err
         };
         callback(ret, null);
       } else {
         var ret = {
+          name: runner.name,
           func: func,
           res: res
         }
@@ -90,7 +97,9 @@ function Request() {
     
     method = method.toLowerCase();
     
-    path = '/v' + config.api_version + '/' + path;
+    if(path.substr(0, 3) !== '/v' + config.api_version) {
+      path = '/v' + config.api_version + '/' + path;
+    }
     
     var opts = {
       host: hostname,
@@ -134,7 +143,7 @@ function Request() {
         }
         
         if(typeof j === 'object') {
-          if(j.errors || j.error) {
+          if(j.status_code && j.status_code != 200) {
             j.arguments = used_args;
             return callback(j, null);
           }

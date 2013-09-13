@@ -23,10 +23,6 @@ module.exports = {
     retreive: {
       path: 'bank_accounts/:bank.create.id',
       method: 'get'
-    },
-    delete: {
-      path: 'bank_accounts/:bank.create.id',
-      method: 'delete'
     }
   }
 }
