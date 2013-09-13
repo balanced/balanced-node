@@ -90,7 +90,7 @@ function createFunction(func, runner) {
           func: func,
           err: err
         };
-        callback(ret, null);
+        callback(null, ret);
       } else {
         var ret = {
           name: runner.name,

@@ -26,6 +26,18 @@ module.exports = {
       data: {
         bank_account_uri: ':bank.create.uri'
       }
+    },
+    verify_bank: {
+      path: 'bank_accounts/:bank.create.id/verifications',
+      method: 'post'
+    },
+    confirm_bank_account: {
+      path: 'bank_accounts/:bank.create.id/verifications/:customers.verify_bank.id',
+      method: 'put',
+      data: {
+        amount_1: 1,
+        amount_2: 1
+      }
     }
   }
 }
