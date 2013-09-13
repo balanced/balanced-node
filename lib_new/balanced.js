@@ -14,6 +14,11 @@ function balanced() {
   $scope.init = function(secret, marketplace_uri, api_version) {
     $scope.marketplace = makeMethods(require('./balanced/marketplace'));
     $scope.bank_account = makeMethods(require('./balanced/bank_account'));
+    $scope.card = makeMethods(require('./balanced/card'));
+    $scope.credits = makeMethods(require('./balanced/credits'));
+    $scope.customer = makeMethods(require('./balanced/customer'));
+    $scope.hold = makeMethods(require('./balanced/hold'));
+    $scope.refund = makeMethods(require('./balanced/refund'));
     
     $scope.requestOptions.secret = secret;
     if(typeof api_version !== 'undefined') {

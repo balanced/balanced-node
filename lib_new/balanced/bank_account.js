@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'bank_accounts',
+  name: 'bank_account',
   methods: {
     create: {
       path: 'bank_accounts',

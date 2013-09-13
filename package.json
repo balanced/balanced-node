@@ -1,11 +1,10 @@
 {
   "name": "balanced-official",
   "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
-  "version": "0.3.3",
-  "author": "Balanced Payments / Tenor Enterprises, LLC.",
+  "version": "0.4.0",
+  "author": "Balanced Payments / uh-sem-blee, Co. | typefoo",
   "contributors": [
-    "matthewfl, matthew@balancedpayments.com",
-    "cscharf, chad.scharf@tenorent.com"
+    "jjosef": "john@typefoo.com"
   ],
   "repository": {
     "type": "git",
