@@ -17,17 +17,15 @@ npm install balanced-official
 
 Testing
 -------
+Set up your definitions:
+`cp tests/definitions.sample.js tests/definitions.js`
 
-By running test/test.js you may test most of the functionality and use cases for balanced against the Balanced Payments API as well as see examples for invoking each of the methods exposed (jsDoc to come soon). In order to run the tests, you must edit the test.js file to include the marketplace_uri and secret values to the nbalanced module (just as if you were using it yourself). Here is where you would plug in your test account credentials supplied on your Balanced Payments Dashboard.
+Edit the new definitions.js to contain your API `secret`, `api_verion`, and `marketplace_uri` (although marketplace_uri) is not used yet.
 
-```js
-var api = new balanced({
-    marketplace_uri: "/v1/marketplaces/:marketplace-id", // test marketplace
-    secret: ":secret" // test secret
-});
-```
+Run the tests:
+`node tests/run`
 
-As a word of *caution*, running through all of the tests will generate a lot of garbage in your test account, you have been forewarned.
+Make your own tests with simple JSON. Place them in `tests/run/*.js`
 
 Basic Usage
 -----------
