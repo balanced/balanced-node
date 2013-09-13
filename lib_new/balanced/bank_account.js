@@ -20,11 +20,11 @@ module.exports = {
       }
     },
     id: {
-      path: 'bank_accounts/:id',
+      path: 'bank_accounts/:bank_account_id',
       method: 'get'
     },
     delete: {
-      path: 'bank_accounts/:id',
+      path: 'bank_accounts/:bank_account_id',
       method: 'delete'
     }
   }

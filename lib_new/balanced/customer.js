@@ -9,6 +9,10 @@ module.exports = {
       path: 'customers',
       method: 'get'
     },
+    id: {
+      path: 'customers/:customer_id',
+      method: 'get'
+    },
     add_card: {
       path: 'customers/:customer_id',
       method: 'put',
@@ -35,7 +39,7 @@ module.exports = {
         'amount_2'
       ]
     },
-    delete_customer: {
+    delete: {
       path: 'customers/:customers.create.id',
       method: 'delete'
     }

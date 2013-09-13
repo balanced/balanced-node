@@ -30,11 +30,33 @@ balanced.bank_account.create({
   
   console.log(res);
   // Now get an account by ID
-  balanced.bank_account.id({id: res.id}, function(err, res2) {
+  balanced.bank_account.id({bank_account_id: res.id}, function(err, bankAccount) {
     if(err) {
       return console.log(err);
     }
     
-    console.log(res);
+    console.log(bankAccount);
+    // new customer
+    balanced.customer.create({
+      name: 'John Doe'
+    }, function(err, customer) {
+      if(err) {
+        return console.log(err);
+      }
+      
+      console.log(customer);
+      // add bank to customer
+      balanced.customer.add_bank({
+        bank_account_uri: bankAccount.uri
+      }, {
+        customer_id: customer.id
+      }, function(err, res) {
+        if(err) {
+          return console.log(err);
+        }
+        
+        console.log(res);
+      });
+    });
   });
 });

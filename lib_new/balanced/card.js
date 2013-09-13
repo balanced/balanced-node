@@ -15,16 +15,16 @@ module.exports = {
       path: ':marketplace_uri/cards',
       method: 'get'
     },
-    retreive: {
-      path: ':marketplace_uri/cards/:id',
+    id: {
+      path: ':marketplace_uri/cards/:card_id',
       method: 'get'
     },
     update: {
-      path: ':marketplace_uri/cards/:id',
+      path: ':marketplace_uri/cards/:card_id',
       method: 'put'
     },
-    delete_card: {
-      path: ':marketplace_uri/cards/:cards.create.id',
+    delete: {
+      path: ':marketplace_uri/cards/:card_id',
       method: 'delete'
     }
   }
