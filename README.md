@@ -36,7 +36,6 @@ var balanced = require('balanced');
 balanced.init("API_SECRET", "MARKETPLACE_URI");
 
 // Create a credit card
-// NOTE: Cards is a property of balanced() and already has API context.
 balanced.card.create({
     card_number: "5105105105105100",
     expiration_year: 2020,

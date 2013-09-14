@@ -1,0 +1,18 @@
+% if mode == 'definition': 
+{{ definition }}
+
+% else:
+<%!
+    import json
+
+    def to_json( d ):
+        return json.dumps( d , indent=2)
+%>
+
+var balanced_library = require('balanced-official');
+
+balanced.init('${ctx.api_key}', '${ctx.marketplace_uri}');
+
+{{ method_call }}
+
+% endif

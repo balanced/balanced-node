@@ -8,14 +8,19 @@ var https       = require('https'),
     testDir     = '/run',
     testObjects = {
       marketplace_uri: config.marketplace_uri,
-      secret: config.secret
+      secret: config.secret,
+      complete: false
     }
     runners     = [];
     
-function main() {
+function main(callback) {
   var tests = fs.readdirSync(__dirname + testDir);
   
   for(var i = 0; i < tests.length; i++) {
+    if(testObjects.noDelete && tests[i] === 'cleanup') {
+      console.log('no delete');
+      continue;
+    }
     runners.push(require(__dirname + testDir + '/' + tests[i]));
   }
 
@@ -31,17 +36,20 @@ function main() {
   }
   console.log('Please be patient, building tests...');
   async.series(objectArray, function(err, results) {
-    if(err) {
-      console.log('\n\n----- Running: ' + err.name + ' -----\n\n');
-      console.log('    -- [ERROR]' + err.func + ':\n');
-      console.log(err.err);
-      return;
+    if(!testObjects.noLog) {
+      for(var j = 0; j < results.length; j++) {
+        if(typeof results[j].error !== 'undefined') {
+          console.log('\n\n----- Running: ' + results[j].name + ' -----\n\n');
+          console.log('    -- [ERROR]' + results[j].func + ':\n');
+          console.log(results[j].error);
+          continue;
+        }
+        console.log('\n\n----- Running: ' + results[j].name + ' -----\n\n');
+        console.log('    -- ' + results[j].func + ':\n');
+        console.log(results[j].res);
+      }
     }
-    for(var j = 0; j < results.length; j++) {
-      console.log('\n\n----- Running: ' + results[j].name + ' -----\n\n');
-      console.log('    -- ' + results[j].func + ':\n');
-      console.log(results[j].res);
-    }
+    testObjects.complete = true;
   });
 }
 
@@ -88,7 +96,7 @@ function createFunction(func, runner) {
         var ret = {
           name: runner.name,
           func: func,
-          err: err
+          error: err
         };
         callback(null, ret);
       } else {
@@ -189,3 +197,5 @@ function Request() {
 }
 
 main();
+
+module.exports = testObjects;

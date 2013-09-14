@@ -19,6 +19,7 @@ function balanced() {
     $scope.customer = makeMethods(require('./balanced/customer'));
     $scope.hold = makeMethods(require('./balanced/hold'));
     $scope.refund = makeMethods(require('./balanced/refund'));
+    $scope.account = makeMethods(require('./balanced/account'));
     
     $scope.requestOptions.secret = secret;
     if(typeof api_version !== 'undefined') {
@@ -64,6 +65,7 @@ function balanced() {
       }
       
       if(urlOptions) {
+        urlOptions.marketplace_uri = $scope.requestOptions.marketplace_uri;
         var pathPieces = data.path.split('/');
         for(var i = 0; i < pathPieces.length; i++) {
           if(pathPieces[i].indexOf(':') >= 0) {

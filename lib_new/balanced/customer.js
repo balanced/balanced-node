@@ -40,7 +40,7 @@ module.exports = {
       ]
     },
     delete: {
-      path: 'customers/:customers.create.id',
+      path: 'customers/:customer_id',
       method: 'delete'
     }
   }
