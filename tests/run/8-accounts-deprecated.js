@@ -3,29 +3,35 @@ module.exports = {
   name: 'Accounts Calls',
   functions: {
     create: {
-      path: ':marketplace_uri/accounts',
-      method: 'post',
+      module: 'account',
+      method: 'create',
       data: {
         name: 'John Doe',
       }
     },
     add_card: {
-      path: ':marketplace_uri/accounts/:accounts.create.id',
-      method: 'post',
+      module: 'account',
+      method: 'add_card',
       data: {
         card_uri: ':cards.create.uri'
+      },
+      urlOptions: {
+        account_id: ':accounts.create.id'
       }
     },
     add_bank: {
-      path: ':marketplace_uri/accounts/:accounts.create.id',
-      method: 'put',
+      module: 'account',
+      method: 'add_bank',
       data: {
         bank_account_uri: ':bank.create.uri'
+      },
+      urlOptions: {
+        account_id: ':accounts.create.id'
       }
     },
-    underwrite_person: {
-      path: ':marketplace_uri/accounts',
-      method: 'post',
+    add_underwriter: {
+      module: 'account',
+      method: 'add_underwriter',
       data: {
         merchant: {
           phone_number: '+14089999999',
@@ -34,28 +40,6 @@ module.exports = {
           postal_code: '94110',
           type: 'person',
           street_address: '121 Skriptkid Row'
-        }
-      }
-    },
-    underwrite_business: {
-      path: ':marketplace_uri/accounts',
-      method: 'post',
-      data: {
-        merchant: {
-          phone_number: '+14089999999',
-          name: 'Skripts4Kids',
-          postal_code: '91111',
-          type: 'business',
-          street_address: '555 VoidMain Road',
-          tax_id: 211111111,
-          person: {
-            phone_number: '+14089999999',
-            name: 'Timmy Q. CopyPasta',
-            dob: '1989-12',
-            postal_code: '94110',
-            type: 'person',
-            street_address: '121 Skriptkid Row'
-          }
         }
       }
     }

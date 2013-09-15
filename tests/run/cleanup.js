@@ -3,16 +3,25 @@ module.exports = {
   name: 'Delete created items',
   functions: {
     delete_bank: {
-      path: 'bank_accounts/:bank.create.id',
-      method: 'delete'
+      module: 'bank_account',
+      method: 'delete',
+      urlOptions: {
+        bank_account_id: ':bank.create.id'
+      }
     },
     delete_card: {
-      path: ':marketplace_uri/cards/:cards.create.id',
-      method: 'delete'
+      module: 'card',
+      method: 'delete',
+      urlOptions: {
+        card_id: ':cards.create.id'
+      }
     },
     delete_customer: {
-      path: 'customers/:customers.create.id',
-      method: 'delete'
+      module: 'customer',
+      method: 'delete',
+      urlOptions: {
+        customer_id: ':customers.create.id'
+      }
     }
   }
 }

@@ -3,8 +3,8 @@ module.exports = {
   name: 'Marketplace Calls',
   functions: {
     me: {
-      path: 'marketplaces',
-      method: 'get'
+      module: 'marketplace',
+      method: 'mine'
     }
   }
 }

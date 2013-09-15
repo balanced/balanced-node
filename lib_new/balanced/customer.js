@@ -27,17 +27,39 @@ module.exports = {
         'bank_account_uri'
       ]
     },
-    verify_bank: {
-      path: 'bank_accounts/:bank_account_id/verifications',
+    add_credit: {
+      path: 'customers/:customer_id/credits',
+      method: 'post',
+      requires: [
+        'amount'
+      ]
+    },
+    list_credits: {
+      path: 'customers/:customer_id/credits',
+      method: 'get'
+    },
+    add_debit: {
+      path: 'customers/:customer_id/debits',
       method: 'post'
     },
-    confirm_bank_account: {
-      path: 'bank_accounts/:bank_account_id/verifications/:verification_id',
-      method: 'put',
+    list_debits: {
+      path: 'customers/:customer_id/debits',
+      method: 'get'
+    },
+    list_holds: {
+      path: 'customers/:customer_id/holds',
+      method: 'get'
+    },
+    add_refund: {
+      path: 'customers/:customer_id/refunds',
+      method: 'post',
       requires: [
-        'amount_1',
-        'amount_2'
+        'debit_uri'
       ]
+    },
+    list_refunds: {
+      path: 'customers/:customer_id/refunds',
+      method: 'get'
     },
     delete: {
       path: 'customers/:customer_id',

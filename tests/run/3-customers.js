@@ -3,40 +3,60 @@ module.exports = {
   name: 'Customer Calls',
   functions: {
     create: {
-      path: 'customers',
-      method: 'post',
+      module: 'customer',
+      method: 'create',
       data: {
         name: 'Joe M Bob'
       }
     },
     list: {
-      path: 'customers',
-      method: 'get'
+      module: 'customer',
+      method: 'list'
+    },
+    id: {
+      module: 'customer',
+      method: 'id',
+      urlOptions: {
+        customer_id: ':customers.create.id'
+      }
     },
     add_card: {
-      path: 'customers/:customers.create.id',
-      method: 'put',
+      module: 'customer',
+      method: 'add_card',
       data: {
         card_uri: ':cards.create.uri'
+      },
+      urlOptions: {
+        customer_id: ':customers.create.id'
       }
     },
     add_bank: {
-      path: 'customers/:customers.create.id',
-      method: 'put',
+      module: 'customer',
+      method: 'add_bank',
       data: {
         bank_account_uri: ':bank.create.uri'
+      },
+      urlOptions: {
+        customer_id: ':customers.create.id'
       }
     },
     verify_bank: {
-      path: 'bank_accounts/:bank.create.id/verifications',
-      method: 'post'
+      module: 'bank_account',
+      method: 'init_bank_account_verification',
+      urlOptions: {
+        bank_account_id: ':bank.create.id'
+      }
     },
     confirm_bank_account: {
-      path: 'bank_accounts/:bank.create.id/verifications/:customers.verify_bank.id',
-      method: 'put',
+      module: 'bank_account',
+      method: 'confirm_bank_account_verification',
       data: {
         amount_1: 1,
         amount_2: 1
+      },
+      urlOptions: {
+        bank_account_id: ':bank.create.id',
+        verification_id: ':customers.verify_bank.id'
       }
     }
   }

@@ -3,12 +3,15 @@ module.exports = {
   name: 'Debit Calls',
   functions: {
     customer_debit: {
-      path: 'customers/:customers.create.id/debits',
-      method: 'post',
+      module: 'customer',
+      method: 'add_debit',
       data: {
         appears_on_statement_as: 'A transaction',
         amount: 500,
         description: 'A more descriptive response about this transaction'
+      },
+      urlOptions: {
+        customer_id: ':customers.create.id'
       }
     }
   }

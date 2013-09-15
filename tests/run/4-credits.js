@@ -3,10 +3,13 @@ module.exports = {
   name: 'Credit Calls',
   functions: {
     credit_bank_account: {
-      path: 'bank_accounts/:bank.create.id/credits',
-      method: 'post',
+      module: 'credits',
+      method: 'create',
       data: {
         amount: '10000'
+      },
+      urlOptions: {
+        bank_account_id: ':bank.create.id'
       }
     }
   }

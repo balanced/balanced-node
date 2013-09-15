@@ -3,8 +3,8 @@ module.exports = {
   name: 'Bank Account Calls',
   functions: {
     create: {
-      path: 'bank_accounts',
-      method: 'post',
+      module: 'bank_account',
+      method: 'create',
       data: {
         routing_number: '021000021',
         name: 'Joe M. Bob',
@@ -13,16 +13,19 @@ module.exports = {
       }
     },
     list: {
-      path: 'bank_accounts',
-      method: 'get',
+      module: 'bank_account',
+      method: 'list',
       data: {
         limit: 10,
         offset: 0
       }
     },
-    retreive: {
-      path: 'bank_accounts/:bank.create.id',
-      method: 'get'
+    id: {
+      module: 'bank_account',
+      method: 'id',
+      urlOptions: {
+        bank_account_id: ':bank.create.id'
+      }
     }
   }
 }

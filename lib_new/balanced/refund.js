@@ -1,12 +1,17 @@
 module.exports = {
-  variable: 'refuns',
+  name: 'refund',
   methods: {
-    create: {
-      path: 'customers/:customer_id/refunds',
-      method: 'post',
-      required: [
-        'debit_uri',
-      ]
+    list: {
+      path: ':marketplace_uri/refunds',
+      method: 'get',
+    },
+    id: {
+      path: ':marketplace_uri/refunds/:refund_id',
+      method: 'get'
+    },
+    update: {
+      path: ':marketplace_uri/refunds/:refund_id',
+      method: 'put'
     }
   }
 }

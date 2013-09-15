@@ -13,16 +13,30 @@ function Request(opts) {
   
   $scope.request = function(path, method, data, callback) {
     var used_args = arguments;
-  
-    var q = JSON.stringify(data);
-    if(q === undefined) {
-      q = '';
-    }
-    
+
     method = method.toLowerCase();
+  
+    if(method !== 'get') {
+      var q = JSON.stringify(data);
+      if(q === undefined) {
+        q = '';
+      }
+    }
     
     if(path.substr(0, 3) !== '/v' + $scope.requestOptions.api_version) {
       path = '/v' + $scope.requestOptions.api_version + '/' + path;
+    }
+    
+    if(method === 'get' && data) {
+      var dataKeys = Object.keys(data);
+      for(var i = 0; i < dataKeys.length; i++) {
+        if(i === 0) {
+          path += '?';
+        } else {
+          path += '&';
+        }
+        path += encodeURIComponent(dataKeys[i]) + '=' + encodeURIComponent(data[dataKeys[i]]);
+      }
     }
     
     var opts = {

@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'bank_accounts',
+  name: 'marketplace',
   methods: {
     mine: {
       path: 'marketplaces',

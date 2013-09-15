@@ -17,18 +17,18 @@
     "payments"
   ],
   "license": "MIT",
-  "main": "./lib/nbalanced.js",
+  "main": "./lib_new/balanced.js",
   "engines": {
-    "node": ">= 0.6.0"
+    "node": ">= 0.8.0"
   },
   "scripts": {
     "test": "node tests/run.js"
   },
   "devDependencies": {
     "mu2": "*",
-    "async": "~0.2.9",
-    "extend": "~1.2.0"
+    "async": "~0.2.9"
   },
   "dependencies": {
+    "extend": "~1.2.0"
   }
 }

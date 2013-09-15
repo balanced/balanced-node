@@ -3,8 +3,8 @@ module.exports = {
   name: 'Credit Card Calls',
   functions: {
     create: {
-      path: ':marketplace_uri/cards',
-      method: 'post',
+      module: 'card',
+      method: 'create',
       data: {
         card_number: 5105105105105100,
         expiration_month: 12,
@@ -13,20 +13,26 @@ module.exports = {
       }
     },
     list: {
-      path: ':marketplace_uri/cards',
-      method: 'get'
+      module: 'card',
+      method: 'list'
     },
-    retreive: {
-      path: ':marketplace_uri/cards/:cards.create.id',
-      method: 'get'
+    id: {
+      module: 'card',
+      method: 'id',
+      urlOptions: {
+        card_id: ':cards.create.id'
+      }
     },
     update: {
-      path: ':marketplace_uri/cards/:cards.create.id',
-      method: 'put',
+      module: 'card',
+      method: 'update',
       data: {
         meta: {
           my_custom_id: '12345'
         }
+      },
+      urlOptions: {
+        card_id: ':cards.create.id'
       }
     }
   }

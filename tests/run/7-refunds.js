@@ -3,11 +3,14 @@ module.exports = {
   name: 'Refund Calls',
   functions: {
     create: {
-      path: 'customers/:customers.create.id/refunds',
-      method: 'post',
+      module: 'customer',
+      method: 'add_refund',
       data: {
         debit_uri: ':debits.customer_debit.uri',
         description: 'A more descriptive response about this refund'
+      },
+      urlOptions: {
+        customer_id: ':customers.create.id'
       }
     }
   }

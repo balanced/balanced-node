@@ -27,19 +27,20 @@ module.exports = {
         'bank_account_uri'
       ]
     },
-    underwrite_person: {
+    add_underwriter: {
       path: ':marketplace_uri/accounts',
       method: 'post',
       requires: [
         'merchant'
       ]
     },
-    underwrite_business: {
+    list_underwriters: {
       path: ':marketplace_uri/accounts',
-      method: 'post',
-      requires: [
-        'merchant'
-      ]
+      method: 'get'
+    },
+    underwriter: {
+      path: ':marketplace_uri/accounts/:account_id',
+      method: 'get'
     },
     delete: {
       path: ':marketplace_uri/accounts/:account_id',

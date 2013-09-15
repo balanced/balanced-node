@@ -17,9 +17,12 @@ function balanced() {
     $scope.card = makeMethods(require('./balanced/card'));
     $scope.credits = makeMethods(require('./balanced/credits'));
     $scope.customer = makeMethods(require('./balanced/customer'));
+    $scope.debits = makeMethods(require('./balanced/debits'));
     $scope.hold = makeMethods(require('./balanced/hold'));
     $scope.refund = makeMethods(require('./balanced/refund'));
     $scope.account = makeMethods(require('./balanced/account'));
+    $scope.callbacks = makeMethods(require('./balanced/callbacks'));
+    $scope.events = makeMethods(require('./balanced/events'));
     
     $scope.requestOptions.secret = secret;
     if(typeof api_version !== 'undefined') {
@@ -30,7 +33,18 @@ function balanced() {
     } else {
       throw new Error("marketplace_uri is required");
     }
-  }
+  };
+  
+  /*
+   *
+   * Method for calling a URI which was returned from a previous API call.
+   *
+   */
+  $scope.uri = function(uri, method, data, callback) {
+    new Request($scope.requestOptions).request(uri, method, data, function(err, result) {
+      callback(err, result);
+    });
+  };
   
   /*
    *
@@ -52,11 +66,14 @@ function balanced() {
       if(arguments.length === 1) {
         callback = options;
         options = undefined;
-        urlOptions = undefined;
+        urlOptions = {};
       }
       if(arguments.length === 2) {
         callback = urlOptions;
         urlOptions = options;
+      }
+      if(!urlOptions) {
+        urlOptions = {};
       }
       
       var check = checkRequiredFields(data.requires, options, json, name);
@@ -64,15 +81,19 @@ function balanced() {
         return callback(check, null);
       }
       
+      urlOptions.marketplace_uri = $scope.requestOptions.marketplace_uri;
       if(urlOptions) {
-        urlOptions.marketplace_uri = $scope.requestOptions.marketplace_uri;
         var pathPieces = data.path.split('/');
         for(var i = 0; i < pathPieces.length; i++) {
           if(pathPieces[i].indexOf(':') >= 0) {
             var variablePieces = pathPieces[i].substr(1).split('.');
             var newVar = urlOptions;
-            for(var j = 0; j < variablePieces.length; j++) {
-              newVar = newVar[variablePieces[j]];
+            if(variablePieces.length === 1 && typeof urlOptions != 'object') {
+              newVar = urlOptions;
+            } else {
+              for(var j = 0; j < variablePieces.length; j++) {
+                newVar = newVar[variablePieces[j]];
+              }
             }
             pathPieces[i] = newVar;
             data.path = pathPieces.join('/');

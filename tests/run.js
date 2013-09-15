@@ -11,14 +11,24 @@ var https       = require('https'),
       secret: config.secret,
       complete: false
     }
-    runners     = [];
+    runners     = [],
+    testers     = [];
+
+for(var a = 2; a < process.argv.length; a++) {
+  testers.push(process.argv[a]);
+}
     
 function main(callback) {
+  balanced.init(config.secret, config.marketplace_uri);
   var tests = fs.readdirSync(__dirname + testDir);
   
   for(var i = 0; i < tests.length; i++) {
     if(testObjects.noDelete && tests[i] === 'cleanup') {
       console.log('no delete');
+      continue;
+    }
+    if(testers.length > 0 && testers.indexOf(tests[i].substr(0, tests[i].length-3)) < 0) {
+      console.log("Skipping " + tests[i]);
       continue;
     }
     runners.push(require(__dirname + testDir + '/' + tests[i]));
@@ -56,6 +66,76 @@ function main(callback) {
 function createFunction(func, runner) {
   return function(callback) {
     var action = runner.functions[func];
+
+    var data = null;
+    var urlOptions = null;
+    
+    if(action.data) {
+      data = action.data;
+      var dataKeys = Object.keys(action.data);
+      for(var i = 0; i < dataKeys.length; i++) {
+        var d = action.data[dataKeys[i]];
+        if(typeof d !== 'string') {
+          continue;
+        }
+        if(d.indexOf(':') >= 0 && d.indexOf('://') === -1) {
+          var variablePieces = d.substr(1).split('.');
+          var newVar = testObjects;
+          for(var j = 0; j < variablePieces.length; j++) {
+            newVar = newVar[variablePieces[j]];
+          }
+          action.data[dataKeys[i]] = newVar;
+        }
+      }
+    }
+    if(action.urlOptions) {
+      urlOptions = action.urlOptions;
+      var urlKeys = Object.keys(urlOptions);
+      for(i = 0; i < urlKeys.length; i++) {
+        var d = urlOptions[urlKeys[i]];
+        if(typeof d !== 'string') {
+          continue;
+        }
+        console.log('Trying to replace a url argument');
+        console.log(urlKeys);
+        console.log(d);
+        if(d.indexOf(':') >= 0 && d.indexOf('://') === -1) {
+          var variablePieces = d.substr(1).split('.');
+          var newVar = testObjects;
+          for(var j = 0; j < variablePieces.length; j++) {
+            newVar = newVar[variablePieces[j]];
+          }
+          urlOptions[urlKeys[i]] = newVar;
+          console.log('URL Option replaced:' + newVar);
+        }
+      }
+    }
+    
+    balanced[action.module][action.method](data, urlOptions, function(err, res) {
+      if(err) {
+        var ret = {
+          name: runner.name,
+          func: func,
+          error: err
+        };
+        callback(null, ret);
+      } else {
+        var ret = {
+          name: runner.name,
+          func: func,
+          res: res
+        }
+        testObjects[runner.variable][func] = res;
+        callback(null, ret);
+      }
+    });
+  };
+}
+
+function createFunction_OLD(func, runner) {
+  return function(callback) {
+    var action = runner.functions[func];
+    
     var pathPieces = action.path.split('/');
     /*
       Parse any URL variables here.
@@ -81,7 +161,8 @@ function createFunction(func, runner) {
         if(typeof d !== 'string') {
           continue;
         }
-        if(d.indexOf(':') >= 0) {
+        console.log(d[i].indexOf('://'));
+        if(d.indexOf(':') >= 0 && d[i].indexOf('://') !== -1) {
           var variablePieces = d.substr(1).split('.');
           var newVar = testObjects;
           for(var j = 0; j < variablePieces.length; j++) {

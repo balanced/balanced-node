@@ -3,8 +3,8 @@ module.exports = {
   name: 'Hold Calls',
   functions: {
     create: {
-      path: 'holds',
-      method: 'post',
+      module: 'hold',
+      method: 'create',
       data: {
         source_uri: ':cards.create.uri',
         amount: 500,

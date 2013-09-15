@@ -3,12 +3,15 @@ module.exports = {
   name: 'Events Calls',
   functions: {
     list: {
-      path: 'events',
-      method: 'get'
+      module: 'events',
+      method: 'list'
     },
     id: {
-      path: 'events/:events.list.items.0.id',
-      method: 'get'
+      module: 'events',
+      method: 'id',
+      urlOptions: {
+        event_id: ':events.list.items.0.id'
+      }
     }
   }
 }
