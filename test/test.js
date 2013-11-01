@@ -219,7 +219,7 @@ series([
         api.BankAccounts.create({
             name: "Miranda Benz",
             account_number: "9900826301",
-            routing_number: "121000359",
+            routing_number: "021000021",
             type: "checking",
             meta: {
                 info: "created another test account",
@@ -239,7 +239,7 @@ series([
         api.BankAccounts.create({
             name: "Miranda Benz",
             account_number: "9900826301",
-            routing_number: "121000359",
+            routing_number: "021000021",
             type: "checking",
             meta: {
                 info: "created another test account",
@@ -276,7 +276,7 @@ series([
         api.BankAccounts.create({
             name: "Jessica Maserati",
             account_number: "9900000001",
-            routing_number: "121000358",
+            routing_number: "021000021",
             type: "checking",
             meta: {
                 info: "this is a test account",
@@ -532,7 +532,7 @@ series([
         api.BankAccounts.create({
             name: "Customer Bank Account",
             account_number: "9900000002",
-            routing_number: "121000000",
+            routing_number: "021000021",
             type: "checking"
         }, function (err, object) {
             if (err) {
@@ -624,7 +624,7 @@ series([
         api.BankAccounts.create({
             name: "Scoped Customer Bank Account",
             account_number: "9900000003",
-            routing_number: "121000000",
+            routing_number: "021000021",
             type: "checking"
         }, function (err, object) {
             if (err) {
@@ -912,7 +912,7 @@ series([
         api.BankAccounts.create({
             name: "Veronica Lamborghini",
             account_number: "9900000001",
-            routing_number: "121000358",
+            routing_number: "021000021",
             type: "checking"
         }, function (err, object) {
             if (err) {
