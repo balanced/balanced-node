@@ -1,1 +1,0 @@
-{{api}}.Reversals.get

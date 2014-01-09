@@ -1,11 +1,10 @@
 {
     "name": "balanced-official",
     "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
-    "version": "0.3.3",
-    "author": "Balanced Payments / Tenor Enterprises, LLC.",
+    "version": "1.0.0",
+    "author": "Balanced Payments",
     "contributors": [
-	"matthewfl, matthew@balancedpayments.com",
-	"cscharf, chad.scharf@tenorent.com"
+	"matthewfl, matthew@balancedpayments.com"
     ],
     "repository": {
 	"type": "git",
@@ -16,12 +15,15 @@
 	"payments"
     ],
     "license": "MIT",
-    "main": "./lib/nbalanced.js",
+    "main": "./lib/balanced.js",
     "engines": {
 	"node": ">= 0.6.0"
     },
     "scripts": {
 	"test": "node test/test.js"
+    },
+    "dependencies": {
+    	"jsonapi-client": "git://github.com/matthewfl/jsonapi-node.git"
     },
     "devDependencies": {
 	"mu2": "*"
