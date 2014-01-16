@@ -46,7 +46,7 @@ function run(name) {
     if(self.running == true) return;
     var can_run = true;
     var args = [];
-    console.log('>> running: ', name);
+    //console.log('>> running: ', name);
     for(var a=0; a < self.deps.length; a++) {
 	if(tests[self.deps[a]].finish) {
 	    args.push(tests[self.deps[a]].result);
@@ -87,7 +87,7 @@ function run(name) {
 		console.error(err)
 		debugger;
 		finish.assert(false);
-		finish(err);
+		//finish(err);
 	    });
 	}
     } catch(e) {

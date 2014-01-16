@@ -3,6 +3,14 @@ var test = require('./simple_tests')
 
 balanced = require('../');
 
+var fixtures = {
+    card: {
+        'number': '4111111111111111',
+        'expiration_year': '2016',
+        'expiration_month': '12'
+    }
+};
+
 
 test('api_key', function () {
     return balanced.api_key.create().then(function(obj) {
@@ -82,6 +90,32 @@ test('string_together', function(marketplace) {
             'expiration_month': '12'
         })
     ).cards.get(0).debit(500);
+});
+
+test('filter_customer_debits', function (marketplace) {
+    var cb = this;
+    var customer = marketplace.customers.create();
+    var card = marketplace.cards.create(fixtures.card);
+    return customer.add_card(card).then(function(customer) {
+	return balanced.Q.all([
+	    card.debit({
+		amount: 1234,
+		meta: {
+		    testing: 'first debit'
+		}
+	    }),
+	    card.debit({
+		amount: 5678,
+		meta: {
+		    testing: 'second debit',
+		}
+	    })
+	]).then(function (debits) {
+	    return customer.debits.filter('meta.testing', 'first debit').get(0).then(function (first_debit) {
+		cb.assert(first_debit === debits[0]);
+	    });
+	});
+    });
 });
 
 // // test('capture_hold', function(hold_card) {
