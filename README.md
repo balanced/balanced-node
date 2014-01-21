@@ -80,7 +80,7 @@ api.Customers.create({ name: "Valued Customer" }, function (err, newCustomer) {
     }
     // Here we get an customer specific context of balanced() to work with. This is necessary for
     //  customer specific actions.
-    newCustomerApi = api.Customer.balanced(newCustomer);
+    newCustomerApi = api.Customers.balanced(newCustomer);
     console.log("Created new Customer:", newCustomer.uri);
 });
 ```
