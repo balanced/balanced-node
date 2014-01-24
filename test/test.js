@@ -8,6 +8,12 @@ var fixtures = {
         'number': '4111111111111111',
         'expiration_year': '2016',
         'expiration_month': '12'
+    },
+    bank_account: {
+        'routing_number': '021000021',
+        'account_number': '9900000002',
+        'name': 'what up',
+        'type': 'checking'
     }
 };
 
@@ -56,7 +62,7 @@ test('update_customer', function (customer_create) {
 
 test('add_card_to_customer', function(customer_create, card_create) {
     var cb = this;
-    return customer_create.add_card(card_create).then(function () {
+    return card_create.associate_to_customer(customer_create).then(function () {
         cb.assert(card_create.links.customer == customer_create.id);
         return card_create;
     });
@@ -114,6 +120,40 @@ test('filter_customer_debits', function (marketplace) {
 	    return customer.debits.filter('meta.testing', 'first debit').get(0).then(function (first_debit) {
 		cb.assert(first_debit === debits[0]);
 	    });
+	});
+    });
+});
+
+test('test_order_restrictions', function (marketplace) {
+    var cb = this;
+    var merchant = marketplace.customers.create();
+    var merchant_other = marketplace.customers.create();
+    var buyer = marketplace.customers.create();
+    var order = merchant.orders.create();
+    return balanced.Q.all([
+	marketplace.bank_accounts.create(fixtures.bank_account)
+	.associate_to_customer(merchant),
+	marketplace.bank_accounts.create(fixtures.bank_account)
+	.associate_to_customer(merchant_other),
+	marketplace.cards.create(fixtures.card)
+	.associate_to_customer(buyer),
+	order
+    ]).spread(function (merchant_ba, other_ba, card, order) {
+	return order.debit_from(card, 5000).then(function (debit) {
+	    return balanced.Q.all([
+		merchant_ba.credit({amount: 2500, order: order.href}),
+		other_ba.credit({amount: 2000, order: order.href})
+		    .then(
+			function () {
+			    cb.assert(false);
+			},
+			function (err) {
+			    cb.assert(err.toString().indexOf(
+				'is not associated with order customer'
+			    ) != -1);
+			}
+		    )
+	    ]);
 	});
     });
 });
