@@ -34,11 +34,6 @@ module.exports = function test (name, fun) {
     tests[name].finish = false;
     tests[name].required = tests[name].required || [];
     tests[name].errors = [];
-    for(var a = 0; a < deps.length; a++) {
-	if(!tests[deps[a]])
-	    tests[deps[a]] = { required: [] };
-	tests[deps[a]].required.push(name);
-    }
 };
 
 function run(name) {
@@ -52,6 +47,7 @@ function run(name) {
 	    args.push(tests[self.deps[a]].result);
 	}else{
 	    can_run = false;
+	    tests[self.deps[a]].required.push(name);
 	    run(self.deps[a]);
 	}
     }
@@ -84,9 +80,7 @@ function run(name) {
 	    rets.then(function(val) {
 		finish(val);
 	    }, function(err) {
-		console.error(err)
-		debugger;
-		finish.assert(false);
+		self.errors.push(err)
 		//finish(err);
 	    });
 	}

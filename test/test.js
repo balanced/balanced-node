@@ -1,3 +1,9 @@
+// These tests are designed to run concurrently
+// this means that a test will run as soon as everything
+// that it depends on has finished.
+// to run a single test do: node test.js [name of test to run]
+
+
 
 var test = require('./simple_tests')
 
