@@ -70,7 +70,7 @@ function run(name) {
     finish.assert = function(is_true, do_throw) {
 	// only check if the asserted value is true
 	if(!is_true) {
-	    var e = new Error("Assert error, test: ", name);
+	    var e = new Error("Assert error, test: "+ name);
 	    self.errors.push(e);
 	    if(do_throw === true) throw e;
 	}

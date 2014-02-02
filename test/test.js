@@ -10,10 +10,14 @@ var fixtures = {
         'expiration_month': '12'
     },
     bank_account: {
-        'routing_number': '021000021',
-        'account_number': '9900000002',
-        'name': 'what up',
-        'type': 'checking'
+        name: "Miranda Benz",
+        account_number: "9900826301",
+        routing_number: "021000021",
+        type: "checking",
+        meta: {
+            info: "created another test account",
+            test: true
+        }
     }
 };
 
@@ -154,6 +158,34 @@ test('test_order_restrictions', function (marketplace) {
 			}
 		    )
 	    ]);
+	});
+    });
+});
+
+
+test('delete_card', function (marketplace) {
+    // behavior for deleting is getting tweaked slightly soon
+    var cb = this;
+    marketplace.cards.create(fixtures.card).then(function(card) {
+	var href = card.href;
+	return card.delete().then(function () {
+	    return balanced.get(href)
+		.catch(function (err) {
+		    cb.assert(err);
+		    cb();
+		});
+	});
+    });
+});
+
+test('verify_bank_account', function (marketplace) {
+    var cb = this;
+    return marketplace.bank_accounts.create(fixtures.bank_account).then(function (bank_account) {
+	cb.assert(bank_account.can_debit == false);
+	return bank_account.verify().then(function (verification) {
+	    return bank_account.confirm(1,1).then(function (bank_account) {
+		cb.assert(bank_account.can_debit == true);
+	    });
 	});
     });
 });
