@@ -196,6 +196,6 @@ test('verify_bank_account', function (marketplace) {
     });
 });
 
-// // test('capture_hold', function(hold_card) {
-// //     return hold_card.debit({});
-// // });
+test('capture_hold', function(hold_card) {
+    return hold_card.capture({});
+});
