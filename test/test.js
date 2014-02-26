@@ -227,3 +227,18 @@ test('paging_all', function (marketplace, add_card_to_customer, customer_create)
         });
     })
 });
+
+test('paging_none', function (marketplace) {
+    var cb = this;
+    marketplace.customers.create().cards.get(0).catch(function () {
+        cb();
+    });
+});
+
+test('paging_first', function (marketplace) {
+    var cb = this;
+    marketplace.customers.create().cards.first().then(function (a) {
+        cb.assert(a === null);
+        cb();
+    });
+});
