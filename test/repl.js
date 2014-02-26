@@ -7,7 +7,7 @@ r.context.balanced = balanced;
 
 function dump(err, value) {
     console.log('dump '+dump.len+' recieved');
-    dump.last = dump[dump.len++] = value;
+		dump.last = dump[dump.len++] = err || value;
 }
 
 dump.len = 0;
