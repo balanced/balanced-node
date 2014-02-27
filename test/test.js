@@ -67,6 +67,7 @@ test('update_customer', function (customer_create) {
     var cb = this;
     customer_create.name = "testing name";
     return customer_create.save().then(function (c) {
+        customer_create;
         cb.assert(c.name == 'testing name');
     });
 });
@@ -82,7 +83,7 @@ test('add_card_to_customer', function(customer_create, card_create) {
 
 test('add_bank_account_to_customer', function(bank_account_create, customer_create) {
     var cb = this;
-    return customer_create.add_bank_account(bank_account_create)
+    return bank_account_create.associate_to_customer(customer_create)
         .then(function () {
             cb.assert(bank_account_create.links.customer == customer_create.id);
         });
@@ -100,20 +101,19 @@ test('hold_card', function (add_card_to_customer) {
 });
 
 test('string_together', function(marketplace) {
-    return marketplace.customers.create().add_card(
-        marketplace.cards.create({
-            'number': '4111111111111111',
-            'expiration_year': '2016',
-            'expiration_month': '12'
-        })
-    ).cards.get(0).debit(500);
+    var c = marketplace.customers.create();
+    return marketplace.cards.create({
+        'number': '4111111111111111',
+        'expiration_year': '2016',
+        'expiration_month': '12'
+    }).associate_to_customer(c).debit(500);
 });
 
 test('filter_customer_debits', function (marketplace) {
     var cb = this;
     var customer = marketplace.customers.create();
     var card = marketplace.cards.create(fixtures.card);
-    return customer.add_card(card).then(function(customer) {
+    return card.associate_to_customer(customer).then(function(card) {
         return balanced.Q.all([
             card.debit({
                 amount: 1234,
@@ -129,7 +129,7 @@ test('filter_customer_debits', function (marketplace) {
             })
         ]).then(function (debits) {
             return customer.debits.filter('meta.testing', 'first debit').get(0).then(function (first_debit) {
-                cb.assert(first_debit === debits[0]);
+                cb.assert(first_debit.href === debits[0].href);
             });
         });
     });
@@ -217,7 +217,7 @@ test('paging_get_first', function (marketplace) {
 test('paging_all', function (marketplace, add_card_to_customer, customer_create) {
     var cb = this;
     customer_create.cards.then(function (card_page) {
-        card_page.all.then(function (arr) {
+        card_page.all().then(function (arr) {
             cb.assert(arr instanceof Array);
             for(var i=0; i < arr.length; i++) {
                 cb.assert(arr[i]._type == 'card')
