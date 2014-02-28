@@ -35,6 +35,7 @@ test('api_key', function () {
     });
 });
 
+
 test('marketplace', function (api_key) {
     return balanced.marketplace;
 });
@@ -240,5 +241,17 @@ test('paging_first', function (marketplace) {
     marketplace.customers.create().cards.first().then(function (a) {
         cb.assert(a === null);
         cb();
+    });
+});
+
+
+test('api_key_page', function (marketplace) {
+    var cb = this;
+    balanced.api_key.query.then(function (page) {
+        page.all().then(function (arr) {
+            cb.assert(arr.length == 1)
+            cb.assert(arr[0]._type == 'api_key');
+            cb();
+        });
     });
 });
