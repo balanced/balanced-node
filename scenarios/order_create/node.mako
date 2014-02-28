@@ -13,7 +13,7 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('${request['payload']['customer']}').orders.create(
+balanced.get('${request['customer_href']}').orders.create(
 		${to_json( request ) | n }
 )
 

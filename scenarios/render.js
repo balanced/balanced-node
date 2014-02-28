@@ -16,7 +16,7 @@ var config = {
 		href: "${request['uri']}",
     // different uris to use
     uri: {
-				customer: "${request['payload']['customer']}",
+				customer: "${request['customer_href']}",
 				bank_account: "${request['bank_account_uri']}",
 				card: "${request['card_href']}",
 				debit: "${request['debit_href']}",
