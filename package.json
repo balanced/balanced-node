@@ -1,7 +1,7 @@
 {
     "name": "balanced-official-beta",
     "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": "Balanced Payments",
     "contributors": [
         "matthewfl, matthew@balancedpayments.com"
