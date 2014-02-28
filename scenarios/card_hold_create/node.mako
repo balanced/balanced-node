@@ -11,7 +11,10 @@ balanced.get().hold()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['card_href']}').hold(
+		${to_json( request ) | n }
+)
 
 % endif

@@ -11,7 +11,8 @@ balanced.debit.refund()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['debit_href']}').refund()
 
 % endif

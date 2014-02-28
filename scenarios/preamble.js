@@ -7,4 +7,4 @@
 
 var balanced = require('balanced-official');
 
-balanced.configure('{{ secret }}')
+balanced.configure('{{ secret }}');

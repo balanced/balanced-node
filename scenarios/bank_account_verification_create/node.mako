@@ -11,7 +11,8 @@ balanced.get(bank_account_href).verify()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['bank_account_uri']}').verify()
 
 % endif

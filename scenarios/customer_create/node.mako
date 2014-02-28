@@ -11,7 +11,10 @@ balanced.marketplace.customers.create()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.marketplace.customers.create(
+		${to_json( request ) | n }
+)
 
 % endif

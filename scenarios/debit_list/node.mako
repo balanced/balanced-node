@@ -11,7 +11,8 @@ balanced.marketplaces.debits
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.marketplaces.debits
 
 % endif

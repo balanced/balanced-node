@@ -11,7 +11,8 @@ balanced.get().save()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['uri']}').set('name', 'alan turing').set('email', '123@example.com').save()
 
 % endif

@@ -11,7 +11,8 @@ balanced.marketplace.card_holds
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.marketplace.card_holds
 
 % endif

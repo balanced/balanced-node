@@ -11,7 +11,8 @@ balanced.api_key.create()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.api_key.create()
 
 % endif

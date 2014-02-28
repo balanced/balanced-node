@@ -11,7 +11,8 @@ balanced.get().associate_to_customer()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['uri']}').associate_to_customer('${request['payload']['customer']}')
 
 % endif

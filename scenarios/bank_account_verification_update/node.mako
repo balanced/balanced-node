@@ -11,7 +11,8 @@ balanced.get().confirm()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['uri']}').confirm(1,1);
 
 % endif

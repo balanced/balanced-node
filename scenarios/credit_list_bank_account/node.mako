@@ -11,7 +11,8 @@ balanced.get().credits
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['uri']}').credits
 
 % endif

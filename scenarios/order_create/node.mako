@@ -11,7 +11,10 @@ balanced.customer.orders.create()
 
 var balanced = require('balanced-official');
 
-balanced.configure('${ctx.api_key}')
+balanced.configure('${ctx.api_key}');
 
+balanced.get('${request['payload']['customer']}').orders.create(
+		${to_json( request ) | n }
+)
 
 % endif
