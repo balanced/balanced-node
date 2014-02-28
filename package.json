@@ -1,31 +1,31 @@
 {
-    "name": "balanced-official",
+    "name": "balanced-official-beta",
     "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "author": "Balanced Payments",
     "contributors": [
-	"matthewfl, matthew@balancedpayments.com"
+        "matthewfl, matthew@balancedpayments.com"
     ],
     "repository": {
-	"type": "git",
-	"url": "https://github.com/balanced/balanced-node.git"
+        "type": "git",
+        "url": "https://github.com/balanced/balanced-node.git"
     },
     "keywords": [
-	"balanced",
-	"payments"
+        "balanced",
+        "payments"
     ],
     "license": "MIT",
     "main": "./lib/balanced.js",
     "engines": {
-	"node": ">= 0.6.0"
+        "node": ">= 0.8.0"
     },
     "scripts": {
-	"test": "node test/test.js"
+        "test": "node test/test.js"
     },
     "dependencies": {
-    	"jsonapi-client": "git://github.com/matthewfl/jsonapi-node.git"
+        "jsonapi-client": "0.0.7"
     },
     "devDependencies": {
-	"mu2": "*"
+        "mu2": "*"
     }
 }
