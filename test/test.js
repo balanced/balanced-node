@@ -255,3 +255,14 @@ test('api_key_page', function (marketplace) {
         });
     });
 });
+
+test('page_range', function (add_card_to_customer) {
+    var cb = this;
+    balanced.marketplace.cards.range(0, 20).then(function (arr) {
+        cb.assert(arr.length == 20);
+        // we should have at least one card created already, but not 20
+        cb.assert(arr[0] != null);
+        cb.assert(arr[19] == null);
+        cb();
+    });
+});
