@@ -1,3 +1,1 @@
-{{api}}.get('{{uri.customer}}').orders.create(
-		{{json.request}}
-)
+{{api}}.get('{{uri.customer}}').orders.create({{json.request}})

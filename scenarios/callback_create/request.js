@@ -1,3 +1,1 @@
-{{api}}.marketplace.callbacks.create(
-		{{json.request}}
-)
+{{api}}.marketplace.callbacks.create({{json.request}})

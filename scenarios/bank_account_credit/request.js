@@ -1,3 +1,1 @@
-{{api}}.get('{{href}}').credit(
-		{{json.requset}}
-)
+{{api}}.get('{{href}}').credit({{json.requset}})

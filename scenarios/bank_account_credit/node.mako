@@ -13,8 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('${request['uri']}').credit(
-		
-)
+balanced.get('${request['uri']}').credit()
 
 % endif

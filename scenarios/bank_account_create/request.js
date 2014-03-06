@@ -1,3 +1,1 @@
-{{api}}.marketplace.bank_accounts.create(
-		{{json.request}}
-)
+{{api}}.marketplace.bank_accounts.create({{json.request}})

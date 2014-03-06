@@ -13,8 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.marketplace.callbacks.create(
-		${to_json( request ) | n }
-)
+balanced.marketplace.callbacks.create(${to_json( request ) | n })
 
 % endif

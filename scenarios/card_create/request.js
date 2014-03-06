@@ -1,3 +1,1 @@
-{{api}}.marketplace.cards.create(
-		{{json.request}}
-)
+{{api}}.marketplace.cards.create({{json.request}})

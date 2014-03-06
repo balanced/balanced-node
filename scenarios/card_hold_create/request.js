@@ -1,3 +1,1 @@
-{{api}}.get('{{uri.card}}').hold(
-		{{json.request}}
-)
+{{api}}.get('{{uri.card}}').hold({{json.request}})
