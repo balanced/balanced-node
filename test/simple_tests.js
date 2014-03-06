@@ -36,22 +36,12 @@ module.exports = function test (name, fun) {
     tests[name].errors = [];
 };
 
-function run(name) {
+function run(name, self) {
     var self = tests[name];
     if(self.running == true) return;
     var can_run = true;
     var args = [];
     //console.log('>> running: ', name);
-    for(var a=0; a < self.deps.length; a++) {
-        if(tests[self.deps[a]].finish) {
-            args.push(tests[self.deps[a]].result);
-        }else{
-            can_run = false;
-            tests[self.deps[a]].required.push(name);
-            run(self.deps[a]);
-        }
-    }
-    if(!can_run) return; // can not run this test yet
     function finish(result){
         if(self.finish)
             throw new Error("Called finish on a test "+name+" twice");
@@ -71,6 +61,20 @@ function run(name) {
             if(do_throw === true) throw e;
         }
     };
+    for(var a=0; a < self.deps.length; a++) {
+        if(self.deps[a] == 'assert') {
+            args.push(finish.assert);
+        }else if(self.deps[a] == 'cb' || self.deps[a] == 'callback') {
+            args.push(finish);
+        }else if(tests[self.deps[a]].finish) {
+            args.push(tests[self.deps[a]].result);
+        }else{
+            can_run = false;
+            tests[self.deps[a]].required.push(name);
+            run(self.deps[a]);
+        }
+    }
+    if(!can_run) return; // can not run this test yet
     running_test++;
     self.running = true;
     console.log('Running test:', name);

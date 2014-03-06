@@ -64,40 +64,34 @@ test('bank_account_create', function (marketplace) {
 });
 
 
-test('update_customer', function (customer_create) {
-    var cb = this;
+test('update_customer', function (assert, customer_create) {
     customer_create.name = "testing name";
     return customer_create.save().then(function (c) {
-        customer_create;
-        cb.assert(c.name == 'testing name');
+        assert(c.name == 'testing name');
     });
 });
 
-test('add_card_to_customer', function(customer_create, card_create) {
-    var cb = this;
+test('add_card_to_customer', function(assert, customer_create, card_create) {
     return card_create.associate_to_customer(customer_create).then(function () {
-        cb.assert(card_create.links.customer == customer_create.id);
+        assert(card_create.links.customer == customer_create.id);
         return card_create;
     });
 });
 
 
-test('add_bank_account_to_customer', function(bank_account_create, customer_create) {
-    var cb = this;
+test('add_bank_account_to_customer', function(assert, bank_account_create, customer_create) {
     return bank_account_create.associate_to_customer(customer_create)
         .then(function () {
-            cb.assert(bank_account_create.links.customer == customer_create.id);
+            assert(bank_account_create.links.customer == customer_create.id);
         });
 });
 
 test('debit_card', function (add_card_to_customer){
-    var cb = this;
-    return add_card_to_customer.debit({amount: 500});
+    return add_card_to_customer.debit({amount: 5000});
 });
 
 
 test('hold_card', function (add_card_to_customer) {
-    var cb = this;
     return add_card_to_customer.hold({amount: 400});
 });
 
@@ -136,8 +130,7 @@ test('filter_customer_debits', function (marketplace) {
     });
 });
 
-test('test_order_restrictions', function (marketplace) {
-    var cb = this;
+test('test_order_restrictions', function (assert, marketplace) {
     var merchant = marketplace.customers.create();
     var merchant_other = marketplace.customers.create();
     var buyer = marketplace.customers.create();
@@ -157,10 +150,10 @@ test('test_order_restrictions', function (marketplace) {
                 other_ba.credit({amount: 2000, order: order.href})
                     .then(
                         function () {
-                            cb.assert(false);
+                            assert(false);
                         },
                         function (err) {
-                            cb.assert(err.toString().indexOf(
+                            assert(err.toString().indexOf(
                                 'is not associated with order customer'
                             ) != -1);
                         }
@@ -171,28 +164,26 @@ test('test_order_restrictions', function (marketplace) {
 });
 
 
-test('delete_card', function (marketplace) {
+test('delete_card', function (cb, assert, marketplace) {
     // behavior for deleting is getting tweaked slightly soon
-    var cb = this;
     marketplace.cards.create(fixtures.card).then(function(card) {
         var href = card.href;
         return card.delete().then(function () {
             return balanced.get(href)
                 .catch(function (err) {
-                    cb.assert(err);
+                    assert(err);
                     cb();
                 });
         });
     });
 });
 
-test('verify_bank_account', function (marketplace) {
-    var cb = this;
+test('verify_bank_account', function (assert, marketplace) {
     return marketplace.bank_accounts.create(fixtures.bank_account).then(function (bank_account) {
-        cb.assert(bank_account.can_debit == false);
+        assert(bank_account.can_debit == false);
         return bank_account.verify().then(function (verification) {
             return bank_account.confirm(1,1).then(function (bank_account) {
-                cb.assert(bank_account.can_debit == true);
+                assert(bank_account.can_debit == true);
             });
         });
     });
@@ -202,67 +193,80 @@ test('capture_hold', function(hold_card) {
     return hold_card.capture({});
 });
 
-test('paging_get_first', function (marketplace) {
-    var cb = this;
+test('paging_get_first', function (cb, assert, marketplace) {
     var customer = marketplace.customers.create();
     return marketplace.cards.create(fixtures.card)
         .associate_to_customer(customer)
         .then(function (cc) {
             customer.cards.get(0).then(function (c) {
-                cb.assert(cc.href == c.href);
+                assert(cc.href == c.href);
                 cb();
             });
         });
 });
 
-test('paging_all', function (marketplace, add_card_to_customer, customer_create) {
-    var cb = this;
+test('paging_all', function (cb, assert, marketplace, add_card_to_customer, customer_create) {
     customer_create.cards.then(function (card_page) {
         card_page.all().then(function (arr) {
-            cb.assert(arr instanceof Array);
+            assert(arr instanceof Array);
             for(var i=0; i < arr.length; i++) {
-                cb.assert(arr[i]._type == 'card')
-                cb.assert(arr[i].links.customer == customer_create.id);
+                assert(arr[i]._type == 'card')
+                assert(arr[i].links.customer == customer_create.id);
             }
             cb();
         });
     })
 });
 
-test('paging_none', function (marketplace) {
-    var cb = this;
+test('paging_none', function (cb, marketplace) {
     marketplace.customers.create().cards.get(0).catch(function () {
         cb();
     });
 });
 
-test('paging_first', function (marketplace) {
-    var cb = this;
+test('paging_first', function (cb, assert, marketplace) {
     marketplace.customers.create().cards.first().then(function (a) {
-        cb.assert(a === null);
+        assert(a === null);
         cb();
     });
 });
 
 
-test('api_key_page', function (marketplace) {
-    var cb = this;
+test('api_key_page', function (cb, assert, marketplace) {
     balanced.api_key.query.then(function (page) {
         page.all().then(function (arr) {
-            cb.assert(arr.length == 1)
-            cb.assert(arr[0]._type == 'api_key');
+            assert(arr.length == 1)
+            assert(arr[0]._type == 'api_key');
             cb();
         });
     });
 });
 
-test('page_range', function (add_card_to_customer) {
-    var cb = this;
+test('page_range', function (cb, assert, add_card_to_customer) {
     balanced.marketplace.cards.range(0, 20).then(function (arr) {
-        cb.assert(arr.length == 20);
+        assert(arr.length == 20);
         // we should have at least one card created already, but not 20
-        cb.assert(arr[0] != null);
-        cb.assert(arr[19] == null);
+        assert(arr[0] != null);
+        assert(arr[19] == null);
         cb();
+    });
+});
+
+test('credit_create_bank_account', function (cb, assert, marketplace, debit_card) {
+    balanced.marketplace.credits.create({
+        amount: 500,
+        destination: fixtures.bank_account
+    }).then(function (credit) {
+        assert(credit);
+        credit.destination.then(function (dest) {
+            // TODO: bug in the api
+            // we should be able to get back the bank account
+            // even though we can't credit/debit it any more
+            // but we are getting an error
+            assert(dest);
+            cb();
+        }, function(err) {
+            cb(); // TODO: remove
+        });
     });
 });
