@@ -270,3 +270,16 @@ test('credit_create_bank_account', function (cb, assert, marketplace, debit_card
         });
     });
 });
+
+test('events', function (cb, assert, marketplace) {
+    function check() {
+        marketplace.events.first().then(function (event) {
+            if(!event)
+                return setTimeout(check, 2000);
+            assert(event.type);
+            assert(event.id.substr(0, 2) == 'EV');
+            cb();
+        });
+    }
+    check();
+});
