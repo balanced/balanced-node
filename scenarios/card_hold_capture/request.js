@@ -1,1 +1,1 @@
-{{api}}.get('{{href}}').capture()
+{{api}}.get('{{href}}').capture({{json.request}})

@@ -1,1 +1,1 @@
-{{api}}.get('{{uri.credit}}').reversal()
+{{api}}.get('{{uri.credit}}').reversal({{json.request}})

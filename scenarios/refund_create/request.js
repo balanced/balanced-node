@@ -1,1 +1,1 @@
-{{api}}.get('{{uri.debit}}').refund()
+{{api}}.get('{{uri.debit}}').refund({{json.request}})

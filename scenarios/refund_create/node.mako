@@ -13,6 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('${request['debit_href']}').refund()
+balanced.get('${request['debit_href']}').refund(${to_json( request ) | n })
 
 % endif
