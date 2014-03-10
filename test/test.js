@@ -165,18 +165,45 @@ test('test_order_restrictions', function (assert, marketplace) {
 
 
 test('delete_card', function (cb, assert, marketplace) {
-    // behavior for deleting is getting tweaked slightly soon
     marketplace.cards.create(fixtures.card).then(function(card) {
         var href = card.href;
-        return card.delete().then(function () {
-            return balanced.get(href)
-                .catch(function (err) {
-                    assert(err);
-                    cb();
-                });
+        return card.unstore().then(function () {
+            return balanced.get(href).then(function (c) {
+                // when you directly get at the href for a deleted item
+                // it will still return the info for that item
+                // but the card will no longer show up in any indexes
+                assert(c);
+                cb();
+            });
         });
     });
 });
+
+test('delete_bank_account', function (cb, assert, marketplace) {
+    marketplace.bank_accounts.create(fixtures.bank_account).then(function(bank_account) {
+        var href = bank_account.href;
+        return bank_account.unstore().then(function () {
+            return balanced.get(href).then(function (ba) {
+                // when you directly get at the href for a deleted item
+                // it will still return the info for that item
+                // but the card will no longer show up in any indexes
+                assert(ba);
+                cb();
+            });
+        });
+    });
+});
+
+test('debit_untokenized_card', function (cb, assert, marketplace) {
+    marketplace.debits.create({
+        source: fixtures.card,
+        amount: 1000
+    }).then(function (debit) {
+        assert(debit.amount == 1000);
+        cb();
+    });
+});
+
 
 test('verify_bank_account', function (assert, marketplace) {
     return marketplace.bank_accounts.create(fixtures.bank_account).then(function (bank_account) {
