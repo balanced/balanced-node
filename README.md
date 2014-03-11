@@ -7,6 +7,8 @@ The official Node.js library for [Balanced Payments](https://www.balancedpayment
 
 The Balanced Payments API located here: https://www.balancedpayments.com/docs/api.
 
+**v1.x requires Balanced API 1.1.**
+
 Installation
 ------------
 The preferred way to install balanced for Node.js is to use the [npm](http://npmjs.org) package manager for Node.js. Simply type the following
