@@ -319,6 +319,16 @@ test('get_owner_customer_bank_account2', function (marketplace) {
     return balanced.marketplace.owner_customer.bank_accounts.first();
 });
 
+test('credit_owner_bank_account', function(cb, assert, debit_card) {
+    balanced.marketplace.owner_customer.bank_accounts.get(0).credits.create({
+        amount: 100
+    }).then(function (credit) {
+        assert(credit);
+        cb();
+    }, function(err) {
+        assert(false)
+    });
+});
 
 // TODO: need a way to run tests in serial that can change the interals of the system
 test('evict', function (cb, assert, page_range, verify_bank_account) {
