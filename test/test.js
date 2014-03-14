@@ -310,3 +310,22 @@ test('events', function (cb, assert, marketplace) {
     }
     check();
 });
+
+test('get_owner_customer_bank_account', function (marketplace) {
+    return balanced.marketplace.owner_customer.bank_accounts.get(0);
+});
+
+test('get_owner_customer_bank_account', function (marketplace) {
+    return balanced.marketplace.owner_customer.bank_accounts.first();
+});
+
+
+// TODO: need a way to run tests in serial that can change the interals of the system
+test('evict', function (cb, assert, page_range, verify_bank_account) {
+    var s = Object.keys(balanced.cache);
+    balanced.cache_time_limit = 2000;
+    balanced._manage_cache();
+    assert(Object.keys(balanced.cache).length < s.length);
+    balanced.cache_time_limit = 60000;
+    cb();
+});
