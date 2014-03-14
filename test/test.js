@@ -315,7 +315,7 @@ test('get_owner_customer_bank_account', function (marketplace) {
     return balanced.marketplace.owner_customer.bank_accounts.get(0);
 });
 
-test('get_owner_customer_bank_account', function (marketplace) {
+test('get_owner_customer_bank_account2', function (marketplace) {
     return balanced.marketplace.owner_customer.bank_accounts.first();
 });
 
