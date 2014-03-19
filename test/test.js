@@ -68,7 +68,18 @@ test('update_customer', function (assert, customer_create) {
     customer_create.name = "testing name";
     return customer_create.save().then(function (c) {
         assert(c.name == 'testing name');
+        return c;
     });
+});
+
+test('update_customer_chain', function (assert, update_customer) {
+    return balanced.get(update_customer.href).set('email', 'test@example.com').save()
+        .then(function (res) {
+            assert(res.email == 'test@example.com');
+            return res;
+        }, function (err) {
+            assert(false);
+        });
 });
 
 test('add_card_to_customer', function(assert, customer_create, card_create) {

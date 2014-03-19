@@ -1,7 +1,7 @@
 {
     "name": "balanced-official",
     "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "Balanced Payments",
     "contributors": [
         "matthewfl, matthew@balancedpayments.com"
@@ -23,7 +23,7 @@
         "test": "node test/test.js"
     },
     "dependencies": {
-        "jsonapi-client": "0.0.9"
+        "jsonapi-client": "0.0.10"
     },
     "devDependencies": {
         "mu2": "*"
