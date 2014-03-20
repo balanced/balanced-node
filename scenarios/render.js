@@ -17,7 +17,7 @@ var config = {
     // different uris to use
     uri: {
 				customer: "${request.get('customer_href', request.get('payload', {}).get('customer'))}",
-				bank_account: "${request['bank_account_uri']}",
+				bank_account: "${request.get('bank_account_href', request.get('bank_account_uri'))}",
 				card: "${request['card_href']}",
 				debit: "${request['debit_href']}",
 				credit: "${request['credit_href']}"
@@ -37,7 +37,7 @@ var config = {
 
     json: {
         merchant: "${to_json( payload['merchant'] ) | n }",
-        request: "${to_json( request ) | n }"
+        request: "${to_json( request['payload'] ) | n }"
     },
 
     name: "${payload['name'] if payload else request['bank_account']['name']}",

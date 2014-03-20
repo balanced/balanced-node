@@ -13,6 +13,8 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('${request['uri']}').set('description', 'something useful').save()
+balanced.get('${request['uri']}')
+    .set('description', 'something useful')
+    .save()
 
 % endif

@@ -13,6 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('${request['uri']}').debit(${to_json( request ) | n })
+balanced.get('${request.get('bank_account_href', request.get('bank_account_uri'))}').debit(${to_json( request['payload'] ) | n })
 
 % endif

@@ -1,1 +1,3 @@
-{{api}}.get('{{href}}').set('meta.cool', 'story').save()
+{{api}}.get('{{href}}')
+    .set('meta.cool', 'story')
+    .save()

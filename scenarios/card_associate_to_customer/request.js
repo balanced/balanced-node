@@ -1,1 +1,2 @@
-{{api}}.get('{{href}}').associate_to_customer('{{uri.customer}}')
+{{api}}.get('{{href}}')
+    .associate_to_customer('{{uri.customer}}')

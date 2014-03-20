@@ -13,6 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('${request['credit_href']}').reversal(${to_json( request ) | n })
+balanced.get('${request['credit_href']}').reversal(${to_json( request['payload'] ) | n })
 
 % endif

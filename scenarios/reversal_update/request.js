@@ -1,1 +1,3 @@
-{{api}}.get('{{href}}').set('meta.extra', 'info').save()
+{{api}}.get('{{href}}')
+    .set('meta.extra', 'info')
+    .save()

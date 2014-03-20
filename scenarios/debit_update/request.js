@@ -1,1 +1,3 @@
-{{api}}.get('{{href}}').set('description', 'something useful').save()
+{{api}}.get('{{href}}')
+    .set('description', 'something useful')
+    .save()

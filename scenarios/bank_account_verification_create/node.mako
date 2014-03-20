@@ -1,5 +1,5 @@
 % if mode == 'definition': 
-balanced.get(bank_account_href).verify()
+balanced.get().verify()
 
 % else:
 <%!
@@ -13,6 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('${request['bank_account_uri']}').verify()
+balanced.get('${request.get('bank_account_href', request.get('bank_account_uri'))}').verify()
 
 % endif

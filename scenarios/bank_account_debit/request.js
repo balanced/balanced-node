@@ -1,1 +1,1 @@
-{{api}}.get('{{href}}').debit({{json.request}})
+{{api}}.get('{{uri.bank_account}}').debit({{json.request}})

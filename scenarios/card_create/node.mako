@@ -13,6 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.marketplace.cards.create(${to_json( request ) | n })
+balanced.marketplace.cards.create(${to_json( request['payload'] ) | n })
 
 % endif

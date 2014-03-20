@@ -1,1 +1,1 @@
-{{api}}.get(bank_account_href).verify()
+{{api}}.get().verify()
