@@ -1,7 +1,7 @@
 Balanced Node.js library
 =========
 
-[![Build Status](https://travis-ci.org/balanced/balanced-node.png?branch=rev1)](https://travis-ci.org/balanced/balanced-node)
+[![Build Status](https://travis-ci.org/balanced/balanced-node.png?branch=master)](https://travis-ci.org/balanced/balanced-node)
 
 The official Node.js library for [Balanced Payments](https://www.balancedpayments.com).
 
