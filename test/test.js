@@ -3,8 +3,6 @@
 // that it depends on has finished.
 // to run a single test do: node test.js [name of test to run]
 
-
-
 var test = require('./simple_tests')
 
 balanced = require('../');
@@ -14,6 +12,12 @@ var fixtures = {
         'number': '4111111111111111',
         'expiration_year': '2016',
         'expiration_month': '12'
+    },
+    card_dispute_txn: {
+        'number': '6500000000000002',
+        'expiration_year': '3000',
+        'expiration_month': '12',
+        'cvv': '123'
     },
     bank_account: {
         name: "Miranda Benz",
@@ -97,13 +101,33 @@ test('add_bank_account_to_customer', function(assert, bank_account_create, custo
         });
 });
 
-test('debit_card', function (add_card_to_customer){
+test('debit_card', function (add_card_to_customer) {
     return add_card_to_customer.debit({amount: 5000});
 });
 
-
 test('hold_card', function (add_card_to_customer) {
     return add_card_to_customer.hold({amount: 400});
+});
+
+test('dispute', function (cb, assert, marketplace) {
+    var customer = marketplace.customers.create();
+    var card = marketplace.cards.create(fixtures.card_dispute_txn).associate_to_customer(customer);
+    var debit = card.debit({amount: 5000});
+    debit.then(function(d) {
+        function poll_dispute() {
+            balanced.get(d.href).dispute.then(function (dispute) {
+                if (!dispute.href) {
+                    console.log("polling for dispute...");
+                    return setTimeout(poll_dispute, 5000);
+                }
+                assert(dispute.status == "pending");
+                assert(dispute.reason == "fraud");
+                assert(dispute.amount == d.amount);
+                cb();
+            });
+        }
+        poll_dispute();
+    });
 });
 
 test('string_together', function(marketplace) {
