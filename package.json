@@ -1,10 +1,11 @@
 {
     "name": "balanced-official",
-    "description": "Offical Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
+    "description": "Official Balanced Payments API Client for node.js, https://www.balancedpayments.com/docs/api",
     "version": "1.0.6",
     "author": "Balanced Payments",
     "contributors": [
-        "matthewfl, matthew@balancedpayments.com"
+        "matthewfl, matthew@balancedpayments.com",
+        "remear, ben@unfiniti.com"
     ],
     "repository": {
         "type": "git",
