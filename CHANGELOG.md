@@ -1,3 +1,8 @@
+## 1.1
+
+Added Dispute resource
+
+
 ## 1.0.6
 
 * Upgraded jsonapi-client to 0.0.10
