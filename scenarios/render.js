@@ -20,7 +20,9 @@ var config = {
 				bank_account: "${request.get('bank_account_href', request.get('bank_account_uri'))}",
 				card: "${request['card_href']}",
 				debit: "${request['debit_href']}",
-				credit: "${request['credit_href']}"
+				credit: "${request['credit_href']}",
+                order: "${request['href']}"
+
         /*marketplace: "${ctx.marketplace_uri}",
         bankAccount: "${request['uri']}",
         card: "${request.get('uri', request.get('debits_uri',''))}",

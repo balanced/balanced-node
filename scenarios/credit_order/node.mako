@@ -13,6 +13,6 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-balanced.get('').credit_to()
-
+var bank_account = balanced.get('${request.get('bank_account_href', request.get('bank_account_uri'))}')
+balanced.get('${request['href']}').credit_to(bank_account, '${payload['amount'] if payload else request['amount'] or '1100'}'))
 % endif
