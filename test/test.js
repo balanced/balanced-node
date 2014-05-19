@@ -19,6 +19,23 @@ var fixtures = {
         'expiration_month': '12',
         'cvv': '123'
     },
+    card_creditable: {
+        'name': 'Johannes Bach',
+        'number': '4342561111111118',
+        'expiration_month': '05',
+        'expiration_year': '2016'
+    },
+    card_creditable_no_name: {
+        'number': '4342561111111118',
+        'expiration_month': '05',
+        'expiration_year': '2016'
+    },
+    card_non_creditable: {
+        'name': 'Georg Telemann',
+        'number': '4111111111111111',
+        'expiration_month': '12',
+        'expiration_year': '2016'
+    },
     bank_account: {
         name: "Miranda Benz",
         account_number: "9900826301",
@@ -102,7 +119,7 @@ test('add_bank_account_to_customer', function(assert, bank_account_create, custo
 });
 
 test('debit_card', function (add_card_to_customer) {
-    return add_card_to_customer.debit({amount: 5000});
+    return add_card_to_customer.debit({amount: 500000});
 });
 
 test('hold_card', function (add_card_to_customer) {
@@ -341,6 +358,62 @@ test('credit_create_bank_account', function (cb, assert, marketplace, debit_card
         }, function(err) {
             cb(); // TODO: remove
         });
+    });
+});
+
+test('credit_card', function (cb, assert, marketplace, debit_card) {
+    balanced.marketplace.credits.create({
+        amount: 250000,
+        destination: fixtures.card_creditable
+    }).then(function (credit) {
+        assert(credit);
+        assert(credit.amount == 250000);
+        assert(credit.status == 'succeeded');
+        credit.destination.then(function (dest) {
+            assert(dest);
+            cb();
+        }, function(err) {
+            cb(); // TODO: remove
+        });
+    });
+});
+
+test('credit_card_can_credit_false', function (cb, assert, marketplace, debit_card) {
+    balanced.marketplace.credits.create({
+        amount: 250000,
+        destination: fixtures.card_non_creditable
+    }).then(function (credit) {
+    }, function(err) {
+        error = JSON.parse(err.message).errors[0];
+        assert(error.status_code == 409);
+        assert(error.category_code == 'funding-destination-not-creditable');
+        cb();
+    });
+});
+
+test('credit_card_limit', function (cb, assert, marketplace, debit_card) {
+    balanced.marketplace.credits.create({
+        amount: 250001,
+        destination: fixtures.card_creditable
+    }).then(function (credit) {
+    }, function(err) {
+        error = JSON.parse(err.message).errors[0];
+        assert(error.status_code == 409);
+        assert(error.category_code == 'amount-exceeds-limit');
+        cb();
+    });
+});
+
+test('credit_card_require_name', function (cb, assert, marketplace, debit_card) {
+    balanced.marketplace.credits.create({
+        amount: 250001,
+        destination: fixtures.card_creditable_no_name
+    }).then(function (credit) {
+    }, function(err) {
+        error = JSON.parse(err.message).errors[0];
+        assert(error.status_code == 400);
+        assert(error.category_code == 'request');
+        cb();
     });
 });
 
