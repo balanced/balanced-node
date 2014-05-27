@@ -1,6 +1,12 @@
+## 1.2.0
+
+* Push to card support
+* Remove source and destination from Customer
+
+
 ## 1.1
 
-Added Dispute resource
+* Added Dispute resource
 
 
 ## 1.0.6
