@@ -56,5 +56,5 @@ npm test
 
 To run a specific test, you can do
 ```
-node test/tests.js [test name]
+node test/test.js [test name]
 ```
