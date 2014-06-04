@@ -383,8 +383,9 @@ test('credit_card_can_credit_false', function (cb, assert, marketplace, debit_ca
         amount: 250000,
         destination: fixtures.card_non_creditable
     }).then(function (credit) {
+        assert(false);
     }, function(err) {
-        error = JSON.parse(err.message).errors[0];
+        var error = JSON.parse(err.message).errors[0];
         assert(error.status_code == 409);
         assert(error.category_code == 'funding-destination-not-creditable');
         cb();
@@ -397,7 +398,7 @@ test('credit_card_limit', function (cb, assert, marketplace, debit_card) {
         destination: fixtures.card_creditable
     }).then(function (credit) {
     }, function(err) {
-        error = JSON.parse(err.message).errors[0];
+        var error = JSON.parse(err.message).errors[0];
         assert(error.status_code == 409);
         assert(error.category_code == 'amount-exceeds-limit');
         cb();
@@ -410,7 +411,7 @@ test('credit_card_require_name', function (cb, assert, marketplace, debit_card) 
         destination: fixtures.card_creditable_no_name
     }).then(function (credit) {
     }, function(err) {
-        error = JSON.parse(err.message).errors[0];
+        var error = JSON.parse(err.message).errors[0];
         assert(error.status_code == 400);
         assert(error.category_code == 'request');
         cb();
@@ -463,6 +464,20 @@ test('credit_owner_bank_account', function(cb, assert, debit_card) {
     });
 });
 
+test('access_error', function (cb, assert, marketplace) {
+    marketplace.cards.create({
+        number: '4111111111111112',
+        expiration_year: '2016',
+        expiration_month: '12'
+    }).then(function (c) {
+        assert(false);
+    }, function(err) {
+        assert(err.category_code == "card-not-validated");
+        assert(err instanceof Error);
+        assert(err instanceof balanced.ERROR);
+        cb(err);
+    });
+});
 
 // TODO: need a way to run tests in serial that can change the interals of the system
 test('evict', function (cb, assert, page_range, verify_bank_account) {
