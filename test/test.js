@@ -479,6 +479,25 @@ test('access_error', function (cb, assert, marketplace) {
     });
 });
 
+test('card_address', function (marketplace, assert) {
+    return marketplace.cards.create({
+        cvv: '123',
+        expiration_month: '12',
+        expiration_year: '2020',
+        number: '5105105105105100',
+        address: {
+            city: "BROOKLYN",
+            line1: "219 17TH STREET",
+            postal_code: "11215",
+            country_code: "USA"
+        }
+    }).then(function (card) {
+        assert(card.address.state != 'CA');
+        debugger;
+    });
+});
+
+
 // TODO: need a way to run tests in serial that can change the interals of the system
 test('evict', function (cb, assert, page_range, verify_bank_account) {
     var s = Object.keys(balanced.cache);
