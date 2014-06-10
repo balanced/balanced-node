@@ -425,7 +425,8 @@ test('events', function (cb, assert, marketplace) {
 
     function check() {
         marketplace.events.first().then(function (event) {
-            var now = new Date();
+            console.log("polling for events...");
+						var now = new Date();
             assert(((now.getTime() - begin.getTime()) < timeout));
             if (!event && ((now.getTime() - begin.getTime()) < timeout)) {
                 return setTimeout(check, interval);
@@ -499,7 +500,7 @@ test('card_address', function (marketplace, assert) {
 
 
 // TODO: need a way to run tests in serial that can change the interals of the system
-test('evict', function (cb, assert, page_range, verify_bank_account) {
+test('evict', function (cb, assert, page_range, verify_bank_account, dispute, events) {
     var s = Object.keys(balanced.cache);
     balanced.cache_time_limit = 2000;
     balanced._manage_cache();
