@@ -51,6 +51,7 @@ var fixtures = {
 
 test('api_key', function () {
     return balanced.api_key.create().then(function(obj) {
+        console.log('Configure with api key: ', obj.secret);
         balanced.configure(obj.secret);
         return obj;
     });
@@ -128,13 +129,14 @@ test('hold_card', function (add_card_to_customer) {
 
 test('dispute', function (cb, assert, marketplace) {
     var timeout = 12 * 60 * 1000;
-    var interval = 10 * 1000;
+    var interval = 30 * 1000;
     var begin = new Date();
 
     var customer = marketplace.customers.create();
     var card = marketplace.cards.create(fixtures.card_dispute_txn).associate_to_customer(customer);
     var debit = card.debit({amount: 5000});
     debit.then(function(d) {
+        console.log('Looking for dispute on: ', d.id);
         function poll_dispute() {
             balanced.get(d.href).dispute.then(function (dispute) {
                 if (!dispute.href) {
@@ -426,7 +428,7 @@ test('events', function (cb, assert, marketplace) {
     function check() {
         marketplace.events.first().then(function (event) {
             console.log("polling for events...");
-						var now = new Date();
+            var now = new Date();
             assert(((now.getTime() - begin.getTime()) < timeout));
             if (!event && ((now.getTime() - begin.getTime()) < timeout)) {
                 return setTimeout(check, interval);
@@ -495,6 +497,13 @@ test('card_address', function (marketplace, assert) {
     }).then(function (card) {
         assert(card.address.state != 'CA');
         debugger;
+    });
+});
+
+test('chain_filters', function(marketplace, assert) {
+    return marketplace.cards.filter('test', '123').filter('another', '456').then(function(p) {
+        assert(p._url.indexOf('123') != -1);
+        assert(p._url.indexOf('456') != -1);
     });
 });
 
