@@ -13,7 +13,7 @@ var config = {
     api: "balanced", // the name of the api object to use
     user: "user",
     secret: "${ctx.api_key}",
-		href: "${request['uri']}",
+	href: "${request['uri']}",
     // different uris to use
     uri: {
 				customer: "${request.get('customer_href', request.get('payload', {}).get('customer'))}",
@@ -21,7 +21,8 @@ var config = {
 				card: "${request['card_href']}",
 				debit: "${request['debit_href']}",
 				credit: "${request['credit_href']}",
-                order: "${request['order_href']}"
+                order: "${request['order_href']}",
+                card_hold: "${request['card_hold_href']}"
 
         /*marketplace: "${ctx.marketplace_uri}",
         bankAccount: "${request['uri']}",
