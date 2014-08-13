@@ -1,1 +1,1 @@
-{{api}}.get('{{href}}').capture({{json.request}})
+{{api}}.get('{{uri.card_hold}}').capture({{json.request}})
