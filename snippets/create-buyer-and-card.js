@@ -15,7 +15,3 @@ var card = balanced.marketplace.cards.create({
 }).then(function (card) {
     card.associate_to_customer(buyer)
 })
-
-
-
-
