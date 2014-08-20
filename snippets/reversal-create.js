@@ -1,5 +1,5 @@
 // credit_href is the stored href for the credit
-balanced.get(credit_href).reversal({
+balanced.get( credit_href ).reversal({
     "amount": 3000, 
     "meta": {
         "merchant.feedback": "positive", 

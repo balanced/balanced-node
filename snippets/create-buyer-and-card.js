@@ -12,6 +12,6 @@ var card = balanced.marketplace.cards.create({
     "cvv": "123",
     "number": "5105105105105100",
     "expiration_year": "2020"
-}).then(function (card) {
-    card.associate_to_customer(buyer)
+}).then(function( card ) {
+    card.associate_to_customer( buyer )
 })

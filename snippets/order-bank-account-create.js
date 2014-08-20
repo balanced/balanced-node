@@ -3,7 +3,7 @@ var bank_account = balanced.marketplace.bank_accounts.create({
     "account_type": "checking",
     "name": "Johann Bernoulli",
     "account_number": "9900000001"
-}).then(function (bank_account) {
-    bank_account.associate_to_customer(merchant)
+}).then(function( bank_account ) {
+    bank_account.associate_to_customer( merchant )
 })
 

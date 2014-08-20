@@ -1,1 +1,1 @@
-order.credit_to(bank_account, 8000)
+order.credit_to( bank_account, 8000 )
