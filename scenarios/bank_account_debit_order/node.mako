@@ -13,7 +13,7 @@ var balanced = require('balanced-official');
 
 balanced.configure('${ctx.api_key}');
 
-var bank_account = balanced.get('${request['card_href']}')
+var bank_account = balanced.get('${request.get('bank_account_href', request.get('bank_account_uri'))}')
 balanced.get('${request['order_href']}').debit_from(bank_account, ${payload['amount'] if payload else request['amount'] or '1100'})
 
 
