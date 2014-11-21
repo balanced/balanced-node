@@ -380,17 +380,21 @@ test('credit_card', function (cb, assert, marketplace, debit_card) {
     });
 });
 
-test('credit_card_can_credit_false', function (cb, assert, marketplace, debit_card) {
-    balanced.marketplace.credits.create({
-        amount: 250000,
-        destination: fixtures.card_non_creditable
-    }).then(function (credit) {
+test('credit_card_can_credit_false', function(cb, assert, marketplace) {
+    balanced.marketplace.cards.create({
+        'number': '4111111111111111',
+        'expiration_month': '05',
+        'expiration_year': '2016'
+    }).then(function (card) {
+        card.credit({
+            "amount": 1000,
+            "description": "Credit"
+    }).then(function (customer) {
         assert(false);
-    }, function(err) {
-        var error = JSON.parse(err.message).errors[0];
-        assert(error.status_code == 409);
-        assert(error.category_code == 'funding-destination-not-creditable');
+    }, function (err) {
+        assert(err.message == 'FundingInstrumentNotCreditable');
         cb();
+        });
     });
 });
 
