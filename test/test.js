@@ -540,7 +540,7 @@ test('test_credit_account', function (cb, assert, marketplace) {
     });
 });
 
-test('test_settle_reverse_account_credit', function (cb, assert, marketplace) {
+test('test_account_settlement', function (cb, assert, marketplace) {
     balanced.Q.all([
         marketplace.customers.create(),
         marketplace.customers.create()
@@ -551,145 +551,208 @@ test('test_settle_reverse_account_credit', function (cb, assert, marketplace) {
             marketplace.cards.create(fixtures.card)
                 .associate_to_customer(buyer),
             merchant.orders.create(),
-            merchant.orders.create(),
+            merchant.payable_account(),
+        ]).spread(function (merchant_ba, card, order, payable_account) {
+            order.debit_from(card, 5000).then(function (debit) {
+                payable_account.credit({
+                    amount: 5000, order: order.href
+                }).then(function (credit) {
+                    payable_account.settle({
+                        funding_instrument: merchant_ba.href,
+                    }).then(function (settlement) {
+                        merchant.payable_account().then(function (refreshed_account) {
+                            assert(refreshed_account.balance == 0);
+                            cb()
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+test('test_settle_reverse_account_credit', function (cb, assert, marketplace) {
+
+    function err(error) {
+        console.log('error: ' + error)
+        for (var key in error) {
+            console.log(key);
+            console.log(error[key]);
+        }
+        console.log(error.category_code);
+        assert(error instanceof balanced.ERROR);
+        cb(error);
+    }
+
+    function create_order(merchant) {
+        return merchant.orders.create()
+    };
+
+    function create_card(buyer) {
+        return marketplace.cards.create(fixtures.card).
+            associate_to_customer(buyer)
+    };
+
+    function create_bank_account(merchant) {
+        return marketplace.bank_accounts.create(fixtures.bank_account)
+            .associate_to_customer(merchant)
+    };
+
+    function debit_card(order, card) {
+        return order.debit_from(card, 5000)
+    };
+
+    function credit_payable_account(payable_account, order) {
+        return payable_account.credit({amount: 5000, order: order.href})
+    };
+
+    function settle_account(payable_account, merchant_ba) {
+        return payable_account.settle({
+            funding_instrument: merchant_ba.href
+        })
+    };
+
+    function reverse_credit(credit) {
+        return credit.reversal({
+            "amount": 5000,
+            "description": "Reversal for Order #1111"
+        });
+    };
+
+
+    balanced.Q.all([
+        marketplace.customers.create(),
+        marketplace.customers.create()
+    ]).spread(function (merchant, buyer) {
+        balanced.Q.all([
+            create_bank_account(merchant),
+            create_card(buyer),
+            create_order(merchant),
+            create_order(merchant),
             merchant.payable_account(),
         ]).spread(function (merchant_ba, card, order, order_two, payable_account) {
-            order.debit_from(card, 5000).then(function (debit) {
-                payable_account.credit({
-                    amount: 5000, order: order.href
-                }).then(function (credit) {
-                    payable_account.settle({
-                        funding_instrument: merchant_ba.href,
-                    }).then(function (settlement) {
-                        order.debit_from(card, 5000).then(function (debit_two){
-                            console.log('1')
-                            payable_account.credit({
-                                amount: 5000, order: order.href
-                            }).then(function(credit_two){
-                                print(credit_two)
-                                console.log('2')
-                                credit_two.reversal({
-                                        "amount": 5000
-                                    }).then(function(reversal){
-                                    console.log('3')
-                                    merchant.payable_account().then(function (refreshed_account) {
+            balanced.Q.all([
+                debit_card(order, card),
+                debit_card(order_two, card),
+            ]).spread(function (debit_one, debit_two) {
+                balanced.Q.all([
+                    credit_payable_account(payable_account, order),
+                ]).spread(function (credit_one) {
+                    balanced.Q.all([
+                        settle_account(payable_account, merchant_ba),
+                    ]).spread(function (settlement) {
+                            balanced.Q.all([
+                                credit_payable_account(payable_account, order_two),
+                                reverse_credit(credit_one)
+                            ]).spread(function (credit_two, reverse) {
+                                merchant.payable_account().then(
+                                    function (refreshed_account) {
                                         assert(refreshed_account.balance == 0);
                                         cb()
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
+                                    })
+                            })
+                        }
+                    )
+                })
+            })
+        })
+    })
+})
 
-test('test_settlement_account', function (cb, assert, marketplace) {
+test('settling_account_with_an_negative_balance', function (cb, assert, marketplace) {
+
+    function err(error) {
+        console.log('error: ' + error)
+        for (var key in error) {
+            console.log(key);
+            console.log(error[key]);
+        }
+        console.log(error.category_code);
+        assert(error instanceof balanced.ERROR);
+        cb(error);
+    }
+
+    function create_order(merchant) {
+        return merchant.orders.create()
+    };
+
+    function create_card(buyer) {
+        return marketplace.cards.create(fixtures.card).
+            associate_to_customer(buyer)
+    };
+
+    function create_bank_account(merchant) {
+        return marketplace.bank_accounts.create(fixtures.bank_account)
+            .associate_to_customer(merchant)
+    };
+
+    function debit_card(order, card) {
+        return order.debit_from(card, 5000)
+    };
+
+    function credit_payable_account(payable_account, order) {
+        return payable_account.credit({amount: 5000, order: order.href})
+    };
+
+    function settle_account(payable_account, merchant_ba) {
+        return payable_account.settle({
+            funding_instrument: merchant_ba.href
+        })
+    };
+
+    function reverse_credit(credit) {
+        return credit.reversal({
+            "amount": 5000,
+            "description": "Reversal for Order #1111"
+        });
+    };
+
     balanced.Q.all([
         marketplace.customers.create(),
         marketplace.customers.create()
     ]).spread(function (merchant, buyer) {
         balanced.Q.all([
-            marketplace.bank_accounts.create(fixtures.bank_account)
-                .associate_to_customer(merchant),
-            marketplace.cards.create(fixtures.card)
-                .associate_to_customer(buyer),
-            merchant.orders.create(),
+            create_bank_account(merchant),
+            create_card(buyer),
+            create_order(merchant),
+            create_order(merchant),
             merchant.payable_account(),
-        ]).spread(function (merchant_ba, card, order, payable_account) {
-            order.debit_from(card, 5000).then(function (debit) {
-                payable_account.credit({
-                    amount: 5000, order: order.href
-                }).then(function (credit) {
-                    payable_account.settle({
-                        funding_instrument: merchant_ba.href,
-                    }).then(function (settlement) {
-                        merchant.payable_account().then(function (refreshed_account) {
-                            assert(refreshed_account.balance == 0);
-                            cb()
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
+        ]).spread(function (merchant_ba, card, order, order_two, payable_account) {
+            balanced.Q.all([
+                debit_card(order, card),
+                debit_card(order_two, card),
+            ]).spread(function (debit_one, debit_two) {
+                balanced.Q.all([
+                    credit_payable_account(payable_account, order),
+                ]).spread(function (credit_one) {
+                    balanced.Q.all([
+                        settle_account(payable_account, merchant_ba),
+                    ]).spread(function (settlement) {
+                        balanced.Q.all([
+                            reverse_credit(credit_one)
+                        ]).spread(function (credit_two, reverse) {
+                                merchant.payable_account().then(
+                                    function (refreshed_account) {
+                                        assert(refreshed_account.balance == -5000);
+                                        balanced.Q.all([
+                                            settle_account(payable_account, merchant_ba)
+                                        ]).spread(function (settlement) {
+                                            merchant.payable_account().then(
+                                                function (refreshed_account) {
+                                                    assert(refreshed_account.balance == 0);
+                                                    cb()
+                                                })
+                                        })
+                                    })
+                            }
+                        )
+                    })
+                })
+            })
+        })
+    })
+})
 
-
-test('test_reversal', function (cb, assert, marketplace) {
-    balanced.Q.all([
-        marketplace.customers.create(),
-        marketplace.customers.create()
-    ]).spread(function (merchant, buyer) {
-        balanced.Q.all([
-            marketplace.bank_accounts.create(fixtures.bank_account)
-                .associate_to_customer(merchant),
-            marketplace.cards.create(fixtures.card)
-                .associate_to_customer(buyer),
-            merchant.orders.create(),
-            merchant.payable_account(),
-        ]).spread(function (merchant_ba, card, order, payable_account) {
-            order.debit_from(card, 5000).then(function (debit) {
-                console.log('1')
-                order.credit_to(merchant_ba, 5000).then(function (credit) {
-                    console.log('2')
-                    print(credit)
-                    credit.reversal({
-                        "amount": 5000
-                    }).then(function (reversal) {
-                        console.log('3')
-                        print(reversal)
-                        console.log('4')
-
-                        merchant.payable_account().then(function (refreshed_account) {
-                            assert(refreshed_account.balance == 0);
-                            cb()
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
-
-
-
-test('test_reversal1', function (cb, assert, marketplace) {
-    balanced.Q.all([
-        marketplace.customers.create(),
-        marketplace.customers.create()
-    ]).spread(function (merchant, buyer) {
-        balanced.Q.all([
-            marketplace.bank_accounts.create(fixtures.bank_account)
-                .associate_to_customer(merchant),
-            marketplace.cards.create(fixtures.card)
-                .associate_to_customer(buyer),
-            merchant.orders.create(),
-            merchant.payable_account(),
-        ]).spread(function (merchant_ba, card, order, payable_account) {
-            order.debit_from(card, 5000).then(function (debit) {
-                debit.refund({"amount": 3000}).then(function (credit) {
-                    console.log('2')
-                    print(credit)
-                    credit.reversal({
-                        "amount": 5000
-                    }).then(function (reversal) {
-                        console.log('3')
-                        print(reversal)
-                        console.log('4')
-
-                        merchant.payable_account().then(function (refreshed_account) {
-                            assert(refreshed_account.balance == 0);
-                            cb()
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
 
 // TODO: need a way to run tests in serial that can change the interals of the system
 test('evict', function (cb, assert, page_range, verify_bank_account, dispute, events) {
