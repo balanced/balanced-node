@@ -1,3 +1,8 @@
+## 1.3.0
+
+* Account and Settlement support
+
+
 ## 1.2.0
 
 * Push to card support
