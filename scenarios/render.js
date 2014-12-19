@@ -22,7 +22,8 @@ var config = {
 				debit: "${request['debit_href']}",
 				credit: "${request['credit_href']}",
                 order: "${request['order_href']}",
-                card_hold: "${request['card_hold_href']}"
+                card_hold: "${request['card_hold_href']}",
+                account: "${request['href']}"
 
         /*marketplace: "${ctx.marketplace_uri}",
         bankAccount: "${request['uri']}",
