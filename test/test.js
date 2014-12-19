@@ -50,7 +50,7 @@ var fixtures = {
 
 
 test('api_key', function () {
-    return balanced.api_key.create().then(function(obj) {
+    return balanced.api_key.create().then(function (obj) {
         console.log('Configure with api key: ', obj.secret);
         balanced.configure(obj.secret);
         return obj;
@@ -63,11 +63,11 @@ test('marketplace', function (api_key) {
 });
 
 
-test('customer_create', function(marketplace) {
+test('customer_create', function (marketplace) {
     return marketplace.customers.create();
 });
 
-test('card_create', function (marketplace){
+test('card_create', function (marketplace) {
     return balanced.marketplace.cards.create({
         'number': '4111111111111111',
         'expiration_year': '2016',
@@ -104,7 +104,7 @@ test('update_customer_chain', function (assert, update_customer) {
         });
 });
 
-test('add_card_to_customer', function(assert, customer_create, card_create) {
+test('add_card_to_customer', function (assert, customer_create, card_create) {
     return card_create.associate_to_customer(customer_create).then(function () {
         assert(card_create.links.customer == customer_create.id);
         return card_create;
@@ -112,7 +112,7 @@ test('add_card_to_customer', function(assert, customer_create, card_create) {
 });
 
 
-test('add_bank_account_to_customer', function(assert, bank_account_create, customer_create) {
+test('add_bank_account_to_customer', function (assert, bank_account_create, customer_create) {
     return bank_account_create.associate_to_customer(customer_create)
         .then(function () {
             assert(bank_account_create.links.customer == customer_create.id);
@@ -135,7 +135,7 @@ test('dispute', function (cb, assert, marketplace) {
     var customer = marketplace.customers.create();
     var card = marketplace.cards.create(fixtures.card_dispute_txn).associate_to_customer(customer);
     var debit = card.debit({amount: 5000});
-    debit.then(function(d) {
+    debit.then(function (d) {
         console.log('Looking for dispute on: ', d.id);
         function poll_dispute() {
             balanced.get(d.href).dispute.then(function (dispute) {
@@ -156,11 +156,12 @@ test('dispute', function (cb, assert, marketplace) {
                 cb();
             });
         }
+
         poll_dispute();
     });
 });
 
-test('string_together', function(marketplace) {
+test('string_together', function (marketplace) {
     var c = marketplace.customers.create();
     return marketplace.cards.create({
         'number': '4111111111111111',
@@ -173,7 +174,7 @@ test('filter_customer_debits', function (marketplace) {
     var cb = this;
     var customer = marketplace.customers.create();
     var card = marketplace.cards.create(fixtures.card);
-    return card.associate_to_customer(customer).then(function(card) {
+    return card.associate_to_customer(customer).then(function (card) {
         return balanced.Q.all([
             card.debit({
                 amount: 1234,
@@ -214,15 +215,15 @@ test('test_order_restrictions', function (assert, marketplace) {
                 merchant_ba.credit({amount: 2500, order: order.href}),
                 other_ba.credit({amount: 2000, order: order.href})
                     .then(
-                        function () {
-                            assert(false);
-                        },
-                        function (err) {
-                            assert(err.toString().indexOf(
-                                'is not associated with order customer'
-                            ) != -1);
-                        }
-                    )
+                    function () {
+                        assert(false);
+                    },
+                    function (err) {
+                        assert(err.toString().indexOf(
+                            'is not associated with order customer'
+                        ) != -1);
+                    }
+                )
             ]);
         });
     });
@@ -230,7 +231,7 @@ test('test_order_restrictions', function (assert, marketplace) {
 
 
 test('delete_card', function (cb, assert, marketplace) {
-    marketplace.cards.create(fixtures.card).then(function(card) {
+    marketplace.cards.create(fixtures.card).then(function (card) {
         var href = card.href;
         return card.unstore().then(function () {
             return balanced.get(href).then(function (c) {
@@ -245,7 +246,7 @@ test('delete_card', function (cb, assert, marketplace) {
 });
 
 test('delete_bank_account', function (cb, assert, marketplace) {
-    marketplace.bank_accounts.create(fixtures.bank_account).then(function(bank_account) {
+    marketplace.bank_accounts.create(fixtures.bank_account).then(function (bank_account) {
         var href = bank_account.href;
         return bank_account.unstore().then(function () {
             return balanced.get(href).then(function (ba) {
@@ -274,14 +275,14 @@ test('verify_bank_account', function (assert, marketplace) {
     return marketplace.bank_accounts.create(fixtures.bank_account).then(function (bank_account) {
         assert(bank_account.can_debit == false);
         return bank_account.verify().then(function (verification) {
-            return bank_account.confirm(1,1).then(function (bank_account) {
+            return bank_account.confirm(1, 1).then(function (bank_account) {
                 assert(bank_account.can_debit == true);
             });
         });
     });
 });
 
-test('capture_hold', function(hold_card) {
+test('capture_hold', function (hold_card) {
     return hold_card.capture({});
 });
 
@@ -301,7 +302,7 @@ test('paging_all', function (cb, assert, marketplace, add_card_to_customer, cust
     customer_create.cards.then(function (card_page) {
         card_page.all().then(function (arr) {
             assert(arr instanceof Array);
-            for(var i=0; i < arr.length; i++) {
+            for (var i = 0; i < arr.length; i++) {
                 assert(arr[i]._type == 'card')
                 assert(arr[i].links.customer == customer_create.id);
             }
@@ -357,7 +358,7 @@ test('credit_create_bank_account', function (cb, assert, marketplace, debit_card
             // but we are getting an error
             assert(dest);
             cb();
-        }, function(err) {
+        }, function (err) {
             cb(); // TODO: remove
         });
     });
@@ -374,7 +375,7 @@ test('credit_card', function (cb, assert, marketplace, debit_card) {
         credit.destination.then(function (dest) {
             assert(dest);
             cb();
-        }, function(err) {
+        }, function (err) {
             cb(); // TODO: remove
         });
     });
@@ -386,7 +387,7 @@ test('credit_card_can_credit_false', function (cb, assert, marketplace, debit_ca
         destination: fixtures.card_non_creditable
     }).then(function (credit) {
         assert(false);
-    }, function(err) {
+    }, function (err) {
         var error = JSON.parse(err.message).errors[0];
         assert(error.status_code == 409);
         assert(error.category_code == 'funding-destination-not-creditable');
@@ -399,7 +400,7 @@ test('credit_card_limit', function (cb, assert, marketplace, debit_card) {
         amount: 250001,
         destination: fixtures.card_creditable
     }).then(function (credit) {
-    }, function(err) {
+    }, function (err) {
         var error = JSON.parse(err.message).errors[0];
         assert(error.status_code == 409);
         assert(error.category_code == 'amount-exceeds-limit');
@@ -412,7 +413,7 @@ test('credit_card_require_name', function (cb, assert, marketplace, debit_card) 
         amount: 250001,
         destination: fixtures.card_creditable_no_name
     }).then(function (credit) {
-    }, function(err) {
+    }, function (err) {
         var error = JSON.parse(err.message).errors[0];
         assert(error.status_code == 400);
         assert(error.category_code == 'request');
@@ -442,6 +443,7 @@ test('events', function (cb, assert, marketplace) {
             cb();
         });
     }
+
     check();
 });
 
@@ -453,7 +455,7 @@ test('get_owner_customer_bank_account2', function (marketplace) {
     return balanced.marketplace.owner_customer.bank_accounts.first();
 });
 
-test('credit_owner_bank_account', function(cb, assert, debit_card) {
+test('credit_owner_bank_account', function (cb, assert, debit_card) {
     balanced.marketplace.owner_customer.bank_accounts.get(0).credits.create({
         amount: 100
     }).then(function (credit) {
@@ -462,7 +464,7 @@ test('credit_owner_bank_account', function(cb, assert, debit_card) {
             assert(c.id == credit.links.customer);
             cb();
         });
-    }, function(err) {
+    }, function (err) {
         assert(false)
     });
 });
@@ -474,7 +476,7 @@ test('access_error', function (cb, assert, marketplace) {
         expiration_month: '12'
     }).then(function (c) {
         assert(false);
-    }, function(err) {
+    }, function (err) {
         assert(err.category_code == "card-not-validated");
         assert(err instanceof Error);
         assert(err instanceof balanced.ERROR);
@@ -500,12 +502,256 @@ test('card_address', function (marketplace, assert) {
     });
 });
 
-test('chain_filters', function(marketplace, assert) {
-    return marketplace.cards.filter('test', '123').filter('another', '456').then(function(p) {
+test('chain_filters', function (marketplace, assert) {
+    return marketplace.cards.filter('test', '123').filter('another', '456').then(function (p) {
         assert(p._url.indexOf('123') != -1);
         assert(p._url.indexOf('456') != -1);
     });
 });
+
+
+function print(obj) {
+    console.log('string' === typeof obj ? obj : JSON.stringify(obj, null, 4));
+}
+
+test('test_credit_account', function (cb, assert, marketplace) {
+    balanced.Q.all([
+        marketplace.customers.create(),
+        marketplace.customers.create()
+    ]).spread(function (merchant, buyer) {
+        balanced.Q.all([
+            marketplace.bank_accounts.create(fixtures.bank_account)
+                .associate_to_customer(merchant),
+            marketplace.cards.create(fixtures.card)
+                .associate_to_customer(buyer),
+            merchant.orders.create(),
+            merchant.payable_account(),
+        ]).spread(function (merchant_ba, card, order, payable_account) {
+            order.debit_from(card, 5000).then(function (debit) {
+                payable_account.credit({amount: 5000, order: order.href
+                }).then(function (credit) {
+                    merchant.payable_account().then(function (refreshed_account){
+                        assert(refreshed_account.balance == 5000);
+                    cb()
+                    });
+                });
+            });
+        });
+    });
+});
+
+test('test_account_settlement', function (cb, assert, marketplace) {
+    balanced.Q.all([
+        marketplace.customers.create(),
+        marketplace.customers.create()
+    ]).spread(function (merchant, buyer) {
+        balanced.Q.all([
+            marketplace.bank_accounts.create(fixtures.bank_account)
+                .associate_to_customer(merchant),
+            marketplace.cards.create(fixtures.card)
+                .associate_to_customer(buyer),
+            merchant.orders.create(),
+            merchant.payable_account(),
+        ]).spread(function (merchant_ba, card, order, payable_account) {
+            order.debit_from(card, 5000).then(function (debit) {
+                payable_account.credit({
+                    amount: 5000, order: order.href
+                }).then(function (credit) {
+                    payable_account.settle({
+                        funding_instrument: merchant_ba.href,
+                    }).then(function (settlement) {
+                        merchant.payable_account().then(function (refreshed_account) {
+                            assert(refreshed_account.balance == 0);
+                            cb()
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+test('test_settle_reverse_account_credit', function (cb, assert, marketplace) {
+
+    function err(error) {
+        console.log('error: ' + error)
+        for (var key in error) {
+            console.log(key);
+            console.log(error[key]);
+        }
+        console.log(error.category_code);
+        assert(error instanceof balanced.ERROR);
+        cb(error);
+    }
+
+    function create_order(merchant) {
+        return merchant.orders.create()
+    };
+
+    function create_card(buyer) {
+        return marketplace.cards.create(fixtures.card).
+            associate_to_customer(buyer)
+    };
+
+    function create_bank_account(merchant) {
+        return marketplace.bank_accounts.create(fixtures.bank_account)
+            .associate_to_customer(merchant)
+    };
+
+    function debit_card(order, card) {
+        return order.debit_from(card, 5000)
+    };
+
+    function credit_payable_account(payable_account, order) {
+        return payable_account.credit({amount: 5000, order: order.href})
+    };
+
+    function settle_account(payable_account, merchant_ba) {
+        return payable_account.settle({
+            funding_instrument: merchant_ba.href
+        })
+    };
+
+    function reverse_credit(credit) {
+        return credit.reversal({
+            "amount": 5000,
+            "description": "Reversal for Order #1111"
+        });
+    };
+
+
+    balanced.Q.all([
+        marketplace.customers.create(),
+        marketplace.customers.create()
+    ]).spread(function (merchant, buyer) {
+        balanced.Q.all([
+            create_bank_account(merchant),
+            create_card(buyer),
+            create_order(merchant),
+            create_order(merchant),
+            merchant.payable_account(),
+        ]).spread(function (merchant_ba, card, order, order_two, payable_account) {
+            balanced.Q.all([
+                debit_card(order, card),
+                debit_card(order_two, card),
+            ]).spread(function (debit_one, debit_two) {
+                balanced.Q.all([
+                    credit_payable_account(payable_account, order),
+                ]).spread(function (credit_one) {
+                    balanced.Q.all([
+                        settle_account(payable_account, merchant_ba),
+                    ]).spread(function (settlement) {
+                            balanced.Q.all([
+                                credit_payable_account(payable_account, order_two),
+                                reverse_credit(credit_one)
+                            ]).spread(function (credit_two, reverse) {
+                                merchant.payable_account().then(
+                                    function (refreshed_account) {
+                                        assert(refreshed_account.balance == 0);
+                                        cb()
+                                    })
+                            })
+                        }
+                    )
+                })
+            })
+        })
+    })
+})
+
+test('settling_account_with_an_negative_balance', function (cb, assert, marketplace) {
+
+    function err(error) {
+        console.log('error: ' + error)
+        for (var key in error) {
+            console.log(key);
+            console.log(error[key]);
+        }
+        console.log(error.category_code);
+        assert(error instanceof balanced.ERROR);
+        cb(error);
+    }
+
+    function create_order(merchant) {
+        return merchant.orders.create()
+    };
+
+    function create_card(buyer) {
+        return marketplace.cards.create(fixtures.card).
+            associate_to_customer(buyer)
+    };
+
+    function create_bank_account(merchant) {
+        return marketplace.bank_accounts.create(fixtures.bank_account)
+            .associate_to_customer(merchant)
+    };
+
+    function debit_card(order, card) {
+        return order.debit_from(card, 5000)
+    };
+
+    function credit_payable_account(payable_account, order) {
+        return payable_account.credit({amount: 5000, order: order.href})
+    };
+
+    function settle_account(payable_account, merchant_ba) {
+        return payable_account.settle({
+            funding_instrument: merchant_ba.href
+        })
+    };
+
+    function reverse_credit(credit) {
+        return credit.reversal({
+            "amount": 5000,
+            "description": "Reversal for Order #1111"
+        });
+    };
+
+    balanced.Q.all([
+        marketplace.customers.create(),
+        marketplace.customers.create()
+    ]).spread(function (merchant, buyer) {
+        balanced.Q.all([
+            create_bank_account(merchant),
+            create_card(buyer),
+            create_order(merchant),
+            create_order(merchant),
+            merchant.payable_account(),
+        ]).spread(function (merchant_ba, card, order, order_two, payable_account) {
+            balanced.Q.all([
+                debit_card(order, card),
+                debit_card(order_two, card),
+            ]).spread(function (debit_one, debit_two) {
+                balanced.Q.all([
+                    credit_payable_account(payable_account, order),
+                ]).spread(function (credit_one) {
+                    balanced.Q.all([
+                        settle_account(payable_account, merchant_ba),
+                    ]).spread(function (settlement) {
+                        balanced.Q.all([
+                            reverse_credit(credit_one)
+                        ]).spread(function (credit_two, reverse) {
+                                merchant.payable_account().then(
+                                    function (refreshed_account) {
+                                        assert(refreshed_account.balance == -5000);
+                                        balanced.Q.all([
+                                            settle_account(payable_account, merchant_ba)
+                                        ]).spread(function (settlement) {
+                                            merchant.payable_account().then(
+                                                function (refreshed_account) {
+                                                    assert(refreshed_account.balance == 0);
+                                                    cb()
+                                                })
+                                        })
+                                    })
+                            }
+                        )
+                    })
+                })
+            })
+        })
+    })
+})
 
 
 // TODO: need a way to run tests in serial that can change the interals of the system
